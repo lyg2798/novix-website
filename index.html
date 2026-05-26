@@ -1,0 +1,806 @@
+<!DOCTYPE html>
+<html lang="en" data-lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>NOVIX · Components, beyond borders.</title>
+<meta name="description" content="NOVIX Co., Ltd. — 전자부품 제조·유통, 글로벌 무역. Electronic components manufacturing, distribution and global trade.">
+
+<!-- Favicon -->
+<link rel="icon" type="image/png" href="assets/novix-icon.png">
+<link rel="apple-touch-icon" href="assets/novix-icon.png">
+
+<!-- Fonts: Sora (display) + JetBrains Mono (technical) + Pretendard (Hangul/body) -->
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Sora:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+<link rel="stylesheet" as="style" crossorigin href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/static/pretendard.css">
+
+<style>
+  :root{
+    --navy:#0A1530;
+    --navy-2:#0E1B3D;
+    --navy-3:#13234C;
+    --blue:#3E6AE1;
+    --blue-bright:#2F7BFF;
+    --blue-soft:#EAF0FE;
+    --ink:#0E1424;
+    --graphite:#2C313C;
+    --pewter:#5C5E62;
+    --silver:#8B91A0;
+    --cloud:#E2E6EE;
+    --cloud-2:#EDF0F6;
+    --mist:#F5F7FB;
+    --mist-2:#FAFBFD;
+    --white:#FFFFFF;
+    --vmark-a:var(--navy);
+    --vmark-b:var(--blue-bright);
+
+    --display:'Sora','Pretendard',-apple-system,sans-serif;
+    --body:'Pretendard','Sora',-apple-system,'Apple SD Gothic Neo',sans-serif;
+    --mono:'JetBrains Mono','SFMono-Regular',monospace;
+
+    --maxw:1240px;
+    --ease:cubic-bezier(.22,.61,.36,1);
+  }
+
+  *{box-sizing:border-box;margin:0;padding:0;}
+  html{scroll-behavior:smooth;-webkit-text-size-adjust:100%;}
+  body{
+    font-family:var(--body);
+    color:var(--graphite);
+    background:var(--white);
+    font-size:16px;
+    line-height:1.6;
+    -webkit-font-smoothing:antialiased;
+    text-rendering:optimizeLegibility;
+    overflow-x:hidden;
+  }
+  ::selection{background:var(--blue);color:#fff;}
+  a{color:inherit;text-decoration:none;}
+  img{max-width:100%;display:block;}
+  h1,h2,h3,h4{font-family:var(--display);color:var(--ink);font-weight:600;letter-spacing:-.02em;line-height:1.1;}
+
+  .wrap{max-width:var(--maxw);margin:0 auto;padding:0 32px;}
+  @media(max-width:680px){.wrap{padding:0 22px;}}
+
+  /* mono eyebrow */
+  .eyebrow{
+    font-family:var(--mono);
+    font-size:11.5px;
+    font-weight:500;
+    letter-spacing:.28em;
+    text-transform:uppercase;
+    color:var(--blue);
+    display:inline-flex;
+    align-items:center;
+    gap:10px;
+  }
+  .eyebrow::before{
+    content:"";width:22px;height:1px;background:var(--blue);display:inline-block;
+  }
+
+  /* V mark */
+  .vmark{width:1em;height:1em;display:inline-block;flex:none;overflow:visible;}
+  .vmark path{fill:none;stroke-width:15;stroke-linecap:round;stroke-linejoin:round;}
+  .vmark .a{stroke:var(--vmark-a);}
+  .vmark .b{stroke:var(--vmark-b);}
+
+  /* ===== HEADER ===== */
+  header{
+    position:fixed;top:0;left:0;right:0;z-index:100;
+    background:rgba(255,255,255,.82);
+    backdrop-filter:saturate(180%) blur(14px);
+    -webkit-backdrop-filter:saturate(180%) blur(14px);
+    border-bottom:1px solid transparent;
+    transition:border-color .3s,box-shadow .3s,background .3s;
+  }
+  header.scrolled{border-bottom:1px solid var(--cloud);box-shadow:0 4px 30px rgba(10,21,48,.05);}
+  .nav{display:flex;align-items:center;justify-content:space-between;height:72px;}
+  .brand{display:flex;align-items:center;gap:0;}
+  .brand img{height:26px;width:auto;}
+  .nav-links{display:flex;align-items:center;gap:38px;}
+  .nav-links a{
+    font-family:var(--display);
+    font-size:14.5px;font-weight:500;color:var(--graphite);
+    position:relative;padding:6px 0;transition:color .2s;
+  }
+  .nav-links a::after{
+    content:"";position:absolute;left:0;bottom:-2px;height:2px;width:0;
+    background:var(--blue);transition:width .28s var(--ease);
+  }
+  .nav-links a:hover{color:var(--ink);}
+  .nav-links a:hover::after{width:100%;}
+
+  .nav-right{display:flex;align-items:center;gap:18px;}
+  .lang{
+    display:flex;border:1px solid var(--cloud);border-radius:999px;overflow:hidden;
+    font-family:var(--mono);font-size:11.5px;font-weight:600;letter-spacing:.04em;
+  }
+  .lang button{
+    background:none;border:none;cursor:pointer;padding:7px 13px;color:var(--silver);
+    transition:.2s;font-family:inherit;font-size:inherit;font-weight:inherit;
+  }
+  .lang button.active{background:var(--ink);color:#fff;}
+  .nav-cta{
+    font-family:var(--display);font-weight:600;font-size:14px;
+    background:var(--ink);color:#fff;padding:11px 20px;border-radius:8px;
+    transition:.25s var(--ease);
+  }
+  .nav-cta:hover{background:var(--blue);transform:translateY(-1px);box-shadow:0 8px 24px rgba(62,106,225,.32);}
+
+  .burger{display:none;flex-direction:column;gap:5px;background:none;border:none;cursor:pointer;padding:8px;}
+  .burger span{width:22px;height:2px;background:var(--ink);transition:.3s;border-radius:2px;}
+
+  @media(max-width:920px){
+    .nav-links{
+      position:fixed;inset:72px 0 auto 0;flex-direction:column;gap:0;
+      background:#fff;border-bottom:1px solid var(--cloud);padding:8px 0 18px;
+      transform:translateY(-130%);transition:transform .4s var(--ease);
+      box-shadow:0 24px 40px rgba(10,21,48,.08);
+    }
+    .nav-links.open{transform:translateY(0);}
+    .nav-links a{padding:15px 32px;width:100%;font-size:16px;}
+    .nav-links a::after{display:none;}
+    .burger{display:flex;}
+    .nav-cta{display:none;}
+  }
+
+  /* ===== HERO ===== */
+  .hero{
+    position:relative;padding:148px 0 90px;overflow:hidden;
+    background:
+      radial-gradient(120% 90% at 88% -10%, #EDF3FF 0%, rgba(237,243,255,0) 55%),
+      linear-gradient(180deg,#FBFCFE 0%, #F4F7FC 100%);
+  }
+  .hero-grid-bg{
+    position:absolute;inset:0;z-index:0;pointer-events:none;
+    background-image:
+      linear-gradient(var(--cloud) 1px,transparent 1px),
+      linear-gradient(90deg,var(--cloud) 1px,transparent 1px);
+    background-size:54px 54px;
+    -webkit-mask-image:radial-gradient(120% 80% at 80% 0%,#000 0%,transparent 70%);
+    mask-image:radial-gradient(120% 80% at 80% 0%,#000 0%,transparent 70%);
+    opacity:.55;
+  }
+  .pcb{position:absolute;top:0;right:0;height:100%;width:60%;z-index:0;pointer-events:none;opacity:.9;}
+  @media(max-width:920px){.pcb{opacity:.4;width:100%;}}
+
+  .hero-inner{position:relative;z-index:2;max-width:780px;}
+  .hero .eyebrow{margin-bottom:26px;}
+  .hero h1{
+    font-size:clamp(40px,7vw,78px);font-weight:700;letter-spacing:-.03em;line-height:1.02;
+    color:var(--ink);margin-bottom:26px;
+  }
+  .hero h1 .accent{color:var(--blue);position:relative;}
+  .hero p.lead{
+    font-size:clamp(16px,2vw,19px);color:var(--pewter);max-width:560px;line-height:1.7;margin-bottom:38px;
+  }
+  .hero-actions{display:flex;gap:14px;flex-wrap:wrap;}
+  .btn{
+    font-family:var(--display);font-weight:600;font-size:15px;cursor:pointer;
+    display:inline-flex;align-items:center;gap:10px;padding:15px 26px;border-radius:10px;
+    transition:.25s var(--ease);border:1px solid transparent;
+  }
+  .btn-primary{background:var(--ink);color:#fff;}
+  .btn-primary:hover{background:var(--blue);transform:translateY(-2px);box-shadow:0 14px 34px rgba(62,106,225,.34);}
+  .btn-ghost{background:#fff;color:var(--ink);border-color:var(--cloud);}
+  .btn-ghost:hover{border-color:var(--blue);color:var(--blue);transform:translateY(-2px);}
+  .btn svg{width:16px;height:16px;}
+
+  /* stat strip */
+  .stats{
+    position:relative;z-index:2;margin-top:84px;
+    display:grid;grid-template-columns:repeat(4,1fr);
+    border:1px solid var(--cloud);border-radius:14px;background:rgba(255,255,255,.7);
+    backdrop-filter:blur(6px);overflow:hidden;
+  }
+  .stat{padding:26px 28px;border-right:1px solid var(--cloud);}
+  .stat:last-child{border-right:none;}
+  .stat .k{font-family:var(--mono);font-size:10.5px;letter-spacing:.18em;text-transform:uppercase;color:var(--silver);margin-bottom:10px;}
+  .stat .v{font-family:var(--display);font-size:26px;font-weight:700;color:var(--ink);letter-spacing:-.02em;line-height:1.1;}
+  .stat .v small{font-size:14px;color:var(--pewter);font-weight:500;display:block;margin-top:3px;letter-spacing:0;}
+  @media(max-width:920px){.stats{grid-template-columns:repeat(2,1fr);}.stat:nth-child(2){border-right:none;}.stat:nth-child(1),.stat:nth-child(2){border-bottom:1px solid var(--cloud);}}
+  @media(max-width:520px){.stats{grid-template-columns:1fr;}.stat{border-right:none;border-bottom:1px solid var(--cloud);}.stat:last-child{border-bottom:none;}}
+
+  /* ===== SECTION SHELL ===== */
+  section.block{padding:108px 0;position:relative;}
+  .sec-head{margin-bottom:56px;max-width:680px;}
+  .sec-head .eyebrow{margin-bottom:20px;}
+  .sec-head h2{font-size:clamp(30px,4.4vw,46px);font-weight:700;color:var(--ink);margin-bottom:18px;}
+  .sec-head p{font-size:17px;color:var(--pewter);line-height:1.7;}
+  .sec-num{font-family:var(--mono);font-size:12px;letter-spacing:.2em;color:var(--silver);}
+
+  /* ===== ABOUT ===== */
+  #about{background:var(--white);}
+  .about-grid{display:grid;grid-template-columns:1.05fr 1fr;gap:64px;align-items:center;}
+  @media(max-width:920px){.about-grid{grid-template-columns:1fr;gap:42px;}}
+  .about-copy p{color:var(--pewter);font-size:16.5px;line-height:1.8;margin-bottom:20px;}
+  .about-copy p strong{color:var(--graphite);font-weight:600;}
+  .pillars{display:flex;flex-direction:column;gap:0;border-top:1px solid var(--cloud);}
+  .pillar{display:grid;grid-template-columns:auto 1fr;gap:22px;padding:24px 4px;border-bottom:1px solid var(--cloud);align-items:start;transition:.25s;}
+  .pillar:hover{padding-left:14px;}
+  .pillar .pico{width:46px;height:46px;border:1px solid var(--cloud);border-radius:11px;display:grid;place-items:center;color:var(--blue);background:var(--mist-2);transition:.25s;}
+  .pillar:hover .pico{background:var(--ink);color:#fff;border-color:var(--ink);}
+  .pillar .pico svg{width:22px;height:22px;}
+  .pillar h4{font-size:18px;margin-bottom:6px;color:var(--ink);}
+  .pillar p{font-size:14.5px;color:var(--pewter);line-height:1.6;}
+
+  /* ===== CAPABILITIES ===== */
+  #capabilities{background:var(--mist);border-top:1px solid var(--cloud);border-bottom:1px solid var(--cloud);}
+  .cap-group-label{
+    font-family:var(--mono);font-size:11px;letter-spacing:.22em;text-transform:uppercase;color:var(--graphite);
+    display:flex;align-items:center;gap:14px;margin:0 0 22px;
+  }
+  .cap-group-label::after{content:"";flex:1;height:1px;background:var(--cloud);}
+  .cap-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:16px;margin-bottom:46px;}
+  @media(max-width:880px){.cap-grid{grid-template-columns:repeat(2,1fr);}}
+  @media(max-width:560px){.cap-grid{grid-template-columns:1fr;}}
+  .cap{
+    background:#fff;border:1px solid var(--cloud);border-radius:14px;padding:26px 24px;
+    position:relative;overflow:hidden;transition:.3s var(--ease);
+  }
+  .cap::before{
+    content:"";position:absolute;left:0;top:0;height:3px;width:0;background:var(--blue);transition:width .35s var(--ease);
+  }
+  .cap:hover{transform:translateY(-4px);border-color:#cfd6e6;box-shadow:0 20px 40px rgba(10,21,48,.08);}
+  .cap:hover::before{width:100%;}
+  .cap .cico{width:48px;height:48px;border-radius:12px;background:var(--blue-soft);color:var(--blue);display:grid;place-items:center;margin-bottom:20px;transition:.3s;}
+  .cap:hover .cico{background:var(--blue);color:#fff;}
+  .cap .cico svg{width:24px;height:24px;}
+  .cap .code{font-family:var(--mono);font-size:10.5px;letter-spacing:.14em;color:var(--silver);margin-bottom:8px;}
+  .cap h4{font-size:18px;margin-bottom:8px;color:var(--ink);}
+  .cap p{font-size:14px;color:var(--pewter);line-height:1.6;}
+
+  /* ===== WHY ===== */
+  #why{background:#fff;}
+  .why-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:0;border:1px solid var(--cloud);border-radius:16px;overflow:hidden;}
+  @media(max-width:880px){.why-grid{grid-template-columns:repeat(2,1fr);}}
+  @media(max-width:520px){.why-grid{grid-template-columns:1fr;}}
+  .why-cell{padding:34px 30px;border-right:1px solid var(--cloud);transition:.3s;}
+  .why-cell:last-child{border-right:none;}
+  .why-cell:hover{background:var(--mist);}
+  .why-cell .n{font-family:var(--mono);font-size:13px;color:var(--blue);font-weight:600;margin-bottom:18px;}
+  .why-cell h4{font-size:18px;margin-bottom:10px;color:var(--ink);}
+  .why-cell p{font-size:14px;color:var(--pewter);line-height:1.65;}
+  @media(max-width:880px){.why-cell:nth-child(2){border-right:none;}.why-cell:nth-child(1),.why-cell:nth-child(2){border-bottom:1px solid var(--cloud);}}
+
+  /* ===== NETWORK ===== */
+  #network{background:var(--mist);border-top:1px solid var(--cloud);}
+  .net-grid{display:grid;grid-template-columns:1fr 1fr;gap:60px;align-items:center;}
+  @media(max-width:920px){.net-grid{grid-template-columns:1fr;gap:40px;}}
+  .regions{display:flex;flex-direction:column;}
+  .region{display:flex;align-items:center;justify-content:space-between;padding:20px 0;border-bottom:1px solid var(--cloud);}
+  .region:first-child{border-top:1px solid var(--cloud);}
+  .region .rname{display:flex;align-items:center;gap:14px;}
+  .region .rname .dot{width:9px;height:9px;border-radius:50%;background:var(--blue);box-shadow:0 0 0 4px rgba(62,106,225,.16);}
+  .region .rname b{font-family:var(--display);font-size:17px;font-weight:600;color:var(--ink);}
+  .region .rtag{font-family:var(--mono);font-size:11px;letter-spacing:.1em;color:var(--silver);}
+  .net-visual{
+    position:relative;aspect-ratio:1/.82;border:1px solid var(--cloud);border-radius:18px;
+    background:radial-gradient(110% 110% at 50% 0%,#fff,#F2F5FB);overflow:hidden;display:grid;place-items:center;
+  }
+
+  /* ===== CTA BAND (dark) ===== */
+  .cta-band{
+    position:relative;overflow:hidden;
+    background:linear-gradient(135deg,var(--navy) 0%, var(--navy-2) 55%, #16264f 100%);
+    color:#fff;padding:96px 0;text-align:center;
+  }
+  .cta-band .glow{position:absolute;width:620px;height:620px;border-radius:50%;
+    background:radial-gradient(circle,rgba(47,123,255,.42),transparent 62%);
+    top:-260px;left:50%;transform:translateX(-50%);pointer-events:none;}
+  .cta-band .gridlines{position:absolute;inset:0;opacity:.16;pointer-events:none;
+    background-image:linear-gradient(rgba(255,255,255,.18) 1px,transparent 1px),linear-gradient(90deg,rgba(255,255,255,.18) 1px,transparent 1px);
+    background-size:48px 48px;
+    -webkit-mask-image:radial-gradient(80% 80% at 50% 50%,#000,transparent 75%);
+    mask-image:radial-gradient(80% 80% at 50% 50%,#000,transparent 75%);}
+  .cta-band-inner{position:relative;z-index:2;}
+  .cta-band .eyebrow{color:#7FA8FF;justify-content:center;margin-bottom:24px;}
+  .cta-band .eyebrow::before{background:#7FA8FF;}
+  .cta-band h2{color:#fff;font-size:clamp(32px,5.4vw,58px);font-weight:700;letter-spacing:-.03em;margin-bottom:22px;}
+  .cta-band p{color:#AEBBD6;font-size:18px;max-width:520px;margin:0 auto 38px;line-height:1.7;}
+  .btn-on-dark{background:#fff;color:var(--navy);}
+  .btn-on-dark:hover{background:var(--blue-bright);color:#fff;transform:translateY(-2px);box-shadow:0 14px 40px rgba(47,123,255,.5);}
+
+  /* ===== CONTACT ===== */
+  #contact{background:#fff;}
+  .contact-grid{display:grid;grid-template-columns:1fr 1.1fr;gap:64px;}
+  @media(max-width:920px){.contact-grid{grid-template-columns:1fr;gap:44px;}}
+  .contact-info .ci-row{padding:22px 0;border-bottom:1px solid var(--cloud);}
+  .contact-info .ci-row:first-of-type{border-top:1px solid var(--cloud);}
+  .contact-info .ci-k{font-family:var(--mono);font-size:11px;letter-spacing:.18em;text-transform:uppercase;color:var(--silver);margin-bottom:8px;}
+  .contact-info .ci-v{font-size:16.5px;color:var(--ink);font-weight:500;}
+  .contact-info .ci-v a:hover{color:var(--blue);}
+  .contact-info .ci-v span{display:block;font-size:13.5px;color:var(--pewter);font-weight:400;margin-top:4px;}
+
+  form.contact-form{display:flex;flex-direction:column;gap:16px;}
+  .field{display:flex;flex-direction:column;gap:7px;}
+  .field-row{display:grid;grid-template-columns:1fr 1fr;gap:16px;}
+  @media(max-width:520px){.field-row{grid-template-columns:1fr;}}
+  .field label{font-family:var(--mono);font-size:10.5px;letter-spacing:.16em;text-transform:uppercase;color:var(--silver);}
+  .field input,.field textarea{
+    font-family:var(--body);font-size:15px;color:var(--ink);
+    border:1px solid var(--cloud);border-radius:10px;padding:13px 15px;background:var(--mist-2);
+    transition:.2s;width:100%;resize:vertical;
+  }
+  .field input:focus,.field textarea:focus{outline:none;border-color:var(--blue);background:#fff;box-shadow:0 0 0 4px rgba(62,106,225,.12);}
+  form.contact-form .btn-primary{justify-content:center;margin-top:6px;}
+
+  /* ===== FOOTER ===== */
+  footer.site{background:var(--navy);color:#9AA7C4;padding:72px 0 34px;position:relative;overflow:hidden;}
+  .footer-grid{display:grid;grid-template-columns:1.6fr 1fr 1fr;gap:48px;margin-bottom:54px;}
+  @media(max-width:780px){.footer-grid{grid-template-columns:1fr;gap:36px;}}
+  .footer-brand .flogo{display:flex;align-items:center;gap:12px;margin-bottom:20px;}
+  .footer-brand .flogo .vmark{font-size:34px;--vmark-a:#fff;}
+  .footer-brand .flogo .ftext{font-family:var(--display);font-weight:700;font-size:26px;letter-spacing:.04em;color:#fff;}
+  .footer-brand p{font-size:14.5px;color:#8493B5;max-width:340px;line-height:1.7;}
+  .footer-col h5{font-family:var(--mono);font-size:11px;letter-spacing:.2em;text-transform:uppercase;color:#6E7FA6;margin-bottom:18px;}
+  .footer-col a,.footer-col p{display:block;font-size:14.5px;color:#AEBBD6;margin-bottom:11px;transition:.2s;}
+  .footer-col a:hover{color:#fff;}
+  .footer-bottom{border-top:1px solid rgba(255,255,255,.1);padding-top:26px;display:flex;justify-content:space-between;flex-wrap:wrap;gap:12px;}
+  .footer-bottom span{font-size:12.5px;color:#6E7FA6;font-family:var(--mono);letter-spacing:.04em;}
+
+  /* ===== REVEAL ANIM ===== */
+  .reveal{opacity:0;transform:translateY(26px);transition:opacity .7s var(--ease),transform .7s var(--ease);}
+  .reveal.in{opacity:1;transform:none;}
+  .reveal.d1{transition-delay:.08s;}
+  .reveal.d2{transition-delay:.16s;}
+  .reveal.d3{transition-delay:.24s;}
+
+  @media(prefers-reduced-motion:reduce){
+    .reveal{opacity:1;transform:none;transition:none;}
+    *{animation:none!important;}
+  }
+
+  /* hero entrance */
+  .hero-inner > *{opacity:0;animation:rise .8s var(--ease) forwards;}
+  .hero-inner .eyebrow{animation-delay:.05s;}
+  .hero-inner h1{animation-delay:.16s;}
+  .hero-inner p.lead{animation-delay:.30s;}
+  .hero-inner .hero-actions{animation-delay:.42s;}
+  .stats{opacity:0;animation:rise .8s var(--ease) .54s forwards;}
+  @keyframes rise{to{opacity:1;transform:none;}from{transform:translateY(22px);}}
+
+  /* pcb trace pulse */
+  .pcb .trace{stroke:var(--blue);fill:none;stroke-width:1.4;stroke-linecap:round;
+    stroke-dasharray:8 360;animation:flow 4.5s linear infinite;}
+  .pcb .trace.t2{animation-delay:1.4s;animation-duration:5.5s;}
+  .pcb .trace.t3{animation-delay:2.6s;animation-duration:6s;}
+  .pcb .static-trace{stroke:var(--navy);opacity:.12;fill:none;stroke-width:1.2;}
+  .pcb .node{fill:var(--blue);}
+  .pcb .node-ring{fill:none;stroke:var(--blue);stroke-width:1.2;transform-origin:center;animation:pulse 3s ease-in-out infinite;}
+  @keyframes flow{to{stroke-dashoffset:-368;}}
+  @keyframes pulse{0%,100%{opacity:.5;r:5;}50%{opacity:0;r:13;}}
+</style>
+</head>
+<body>
+
+<!-- ============ HEADER ============ -->
+<header id="hdr">
+  <div class="wrap nav">
+    <a href="#top" class="brand" aria-label="NOVIX home">
+      <img src="assets/novix-wordmark.png" alt="NOVIX">
+    </a>
+    <nav class="nav-links" id="navLinks">
+      <a href="#about" data-en="About" data-ko="회사소개">회사소개</a>
+      <a href="#capabilities" data-en="Capabilities" data-ko="사업영역">사업영역</a>
+      <a href="#why" data-en="Why NOVIX" data-ko="강점">강점</a>
+      <a href="#network" data-en="Network" data-ko="글로벌 네트워크">글로벌 네트워크</a>
+      <a href="#contact" data-en="Contact" data-ko="문의">문의</a>
+    </nav>
+    <div class="nav-right">
+      <div class="lang" role="group" aria-label="Language">
+        <button data-set="ko">KO</button>
+        <button data-set="en" class="active">EN</button>
+      </div>
+      <a href="#contact" class="nav-cta" data-en="Get in touch" data-ko="문의하기">문의하기</a>
+      <button class="burger" id="burger" aria-label="Menu"><span></span><span></span><span></span></button>
+    </div>
+  </div>
+</header>
+
+<main id="top">
+
+  <!-- ============ HERO ============ -->
+  <section class="hero">
+    <div class="hero-grid-bg"></div>
+    <svg class="pcb" viewBox="0 0 600 700" preserveAspectRatio="xMaxYMid slice" aria-hidden="true">
+      <!-- static traces -->
+      <path class="static-trace" d="M600 120 H430 L380 170 H250"/>
+      <path class="static-trace" d="M600 230 H470 L430 270 H300 L270 300"/>
+      <path class="static-trace" d="M600 350 H500 L460 390 H360"/>
+      <path class="static-trace" d="M600 470 H440 L410 500 H320"/>
+      <path class="static-trace" d="M600 560 H520 L480 600 H380"/>
+      <path class="static-trace" d="M520 60 V200 L560 240 V360"/>
+      <path class="static-trace" d="M360 170 V300 L320 340 V470"/>
+      <!-- animated traces -->
+      <path class="trace" d="M600 230 H470 L430 270 H300 L270 300"/>
+      <path class="trace t2" d="M600 350 H500 L460 390 H360"/>
+      <path class="trace t3" d="M520 60 V200 L560 240 V360"/>
+      <!-- nodes -->
+      <g>
+        <circle class="node" cx="250" cy="170" r="4"/><circle class="node-ring" cx="250" cy="170" r="5"/>
+        <circle class="node" cx="270" cy="300" r="4"/><circle class="node-ring" cx="270" cy="300" r="5"/>
+        <circle class="node" cx="360" cy="390" r="4"/><circle class="node-ring" cx="360" cy="390" r="5"/>
+        <circle class="node" cx="560" cy="240" r="4"/><circle class="node-ring" cx="560" cy="240" r="5"/>
+        <circle class="node" cx="380" cy="600" r="4"/>
+        <circle class="node" cx="320" cy="470" r="4"/>
+      </g>
+    </svg>
+
+    <div class="wrap">
+      <div class="hero-inner">
+        <span class="eyebrow" data-en="Electronic Components · Global Trade" data-ko="전자부품 · 글로벌 무역">전자부품 · 글로벌 무역</span>
+        <h1 data-en='Powering the <span class="accent">next circuit.</span>' data-ko='다음 회로를 <span class="accent">잇는 힘.</span>'>다음 회로를 <span class="accent">잇는 힘.</span></h1>
+        <p class="lead" data-en="NOVIX is a Seoul-based manufacturer and distributor of electronic components — connecting precision-engineered supply with partners across borders." data-ko="노빅스는 서울에 본사를 둔 전자부품 제조·유통 기업입니다. 정밀하게 설계된 공급망으로 국경 너머의 파트너를 연결합니다.">노빅스는 서울에 본사를 둔 전자부품 제조·유통 기업입니다. 정밀하게 설계된 공급망으로 국경 너머의 파트너를 연결합니다.</p>
+        <div class="hero-actions">
+          <a href="#capabilities" class="btn btn-primary" data-en="Explore capabilities" data-ko="사업영역 보기">사업영역 보기
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M13 6l6 6-6 6" stroke-linecap="round" stroke-linejoin="round"/></svg>
+          </a>
+          <a href="#contact" class="btn btn-ghost" data-en="Contact sales" data-ko="영업 문의">영업 문의</a>
+        </div>
+      </div>
+
+      <div class="stats">
+        <div class="stat"><div class="k" data-en="Established" data-ko="설립">설립</div><div class="v">2026</div></div>
+        <div class="stat"><div class="k" data-en="Headquarters" data-ko="본사">본사</div><div class="v" data-en="Seoul<small>Gangnam, Korea</small>" data-ko="서울<small>강남 · 대한민국</small>">서울<small>강남 · 대한민국</small></div></div>
+        <div class="stat"><div class="k" data-en="Business Lines" data-ko="사업 분야">사업 분야</div><div class="v">9<small data-en="manufacturing & trade" data-ko="제조 · 무역">제조 · 무역</small></div></div>
+        <div class="stat"><div class="k" data-en="Reach" data-ko="대상 시장">대상 시장</div><div class="v" data-en="Global<small>trade network</small>" data-ko="글로벌<small>무역 네트워크</small>">글로벌<small>무역 네트워크</small></div></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============ ABOUT ============ -->
+  <section class="block" id="about">
+    <div class="wrap">
+      <div class="about-grid">
+        <div class="about-copy reveal">
+          <div class="sec-head" style="margin-bottom:32px;">
+            <span class="eyebrow" data-en="01 — About NOVIX" data-ko="01 — 회사소개">01 — 회사소개</span>
+            <h2 data-en="Engineering trust into every component." data-ko="모든 부품에 신뢰를 설계합니다.">모든 부품에 신뢰를 설계합니다.</h2>
+          </div>
+          <p data-en="<strong>NOVIX Co., Ltd.</strong> brings together electronic-component manufacturing, distribution, and global trade under one disciplined operation — from PCB fabrication and SMT assembly to passive components and automotive-grade parts." data-ko="<strong>주식회사 노빅스</strong>는 전자부품 제조, 유통, 그리고 글로벌 무역을 하나의 정교한 운영 체계로 통합합니다. PCB 제조와 실장(SMT) 기판부터 수동소자, 차량용 부품까지 아우릅니다.">주식회사 노빅스는 전자부품 제조, 유통, 그리고 글로벌 무역을 하나의 정교한 운영 체계로 통합합니다. PCB 제조와 실장(SMT) 기판부터 수동소자, 차량용 부품까지 아우릅니다.</p>
+          <p data-en="Built for the precision demands of modern electronics, we move components beyond borders — pairing reliable sourcing with the responsiveness global partners expect." data-ko="현대 전자산업이 요구하는 정밀함을 기준으로, 우리는 부품을 국경 너머로 이동시킵니다. 안정적인 소싱과 글로벌 파트너가 기대하는 민첩함을 함께 제공합니다.">현대 전자산업이 요구하는 정밀함을 기준으로, 우리는 부품을 국경 너머로 이동시킵니다. 안정적인 소싱과 글로벌 파트너가 기대하는 민첩함을 함께 제공합니다.</p>
+        </div>
+
+        <div class="pillars reveal d1">
+          <div class="pillar">
+            <div class="pico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7"><rect x="4" y="4" width="16" height="16" rx="2"/><path d="M9 9h6v6H9z"/><path d="M9 2v2M15 2v2M9 20v2M15 20v2M2 9h2M2 15h2M20 9h2M20 15h2" stroke-linecap="round"/></svg></div>
+            <div><h4 data-en="Manufacturing" data-ko="제조">제조</h4><p data-en="PCB fabrication, SMT assembly and precision passive components built to spec." data-ko="PCB 제조, SMT 실장, 정밀 수동소자를 사양에 맞춰 생산합니다.">PCB 제조, SMT 실장, 정밀 수동소자를 사양에 맞춰 생산합니다.</p></div>
+          </div>
+          <div class="pillar">
+            <div class="pico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7"><path d="M3 7l9-4 9 4-9 4-9-4z"/><path d="M3 7v10l9 4 9-4V7" stroke-linejoin="round"/><path d="M12 11v10" /></svg></div>
+            <div><h4 data-en="Distribution" data-ko="유통">유통</h4><p data-en="A reliable supply line that keeps the right parts moving to the right place, on time." data-ko="필요한 부품을 적시에 정확한 곳으로 공급하는 안정적인 유통망입니다.">필요한 부품을 적시에 정확한 곳으로 공급하는 안정적인 유통망입니다.</p></div>
+          </div>
+          <div class="pillar">
+            <div class="pico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7"><circle cx="12" cy="12" r="9"/><path d="M3 12h18M12 3c2.5 2.5 2.5 15 0 18M12 3c-2.5 2.5-2.5 15 0 18"/></svg></div>
+            <div><h4 data-en="Global Trade" data-ko="글로벌 무역">글로벌 무역</h4><p data-en="Import, export and trade operations that connect Korean supply to world markets." data-ko="대한민국의 공급력을 세계 시장과 연결하는 수출입·무역 사업입니다.">대한민국의 공급력을 세계 시장과 연결하는 수출입·무역 사업입니다.</p></div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============ CAPABILITIES ============ -->
+  <section class="block" id="capabilities">
+    <div class="wrap">
+      <div class="sec-head reveal">
+        <span class="eyebrow" data-en="02 — Capabilities" data-ko="02 — 사업영역">02 — 사업영역</span>
+        <h2 data-en="From fab to delivery, beyond borders." data-ko="제조부터 납품까지, 국경을 넘어.">제조부터 납품까지, 국경을 넘어.</h2>
+        <p data-en="Nine business lines spanning electronic-component manufacturing, trade and beyond — one accountable partner across the value chain." data-ko="전자부품 제조와 무역을 아우르는 9개 사업 분야. 가치사슬 전반을 책임지는 하나의 파트너입니다.">전자부품 제조와 무역을 아우르는 9개 사업 분야. 가치사슬 전반을 책임지는 하나의 파트너입니다.</p>
+      </div>
+
+      <div class="cap-group-label reveal" data-en="Electronic Components · Manufacturing" data-ko="전자부품 · 제조">전자부품 · 제조</div>
+      <div class="cap-grid">
+        <div class="cap reveal">
+          <div class="cico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7"><rect x="5" y="5" width="14" height="14" rx="1.5"/><path d="M9 9h6v6H9z" /><path d="M9 2v3M15 2v3M9 19v3M15 19v3M2 9h3M2 15h3M19 9h3M19 15h3" stroke-linecap="round"/></svg></div>
+          <div class="code">PCB · FAB</div>
+          <h4 data-en="PCB Fabrication" data-ko="PCB 제조">PCB 제조</h4>
+          <p data-en="Printed circuit boards engineered and produced to demanding specifications." data-ko="까다로운 사양에 맞춘 인쇄회로기판 설계 및 생산.">까다로운 사양에 맞춘 인쇄회로기판 설계 및 생산.</p>
+        </div>
+        <div class="cap reveal d1">
+          <div class="cico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7"><rect x="3" y="6" width="18" height="12" rx="1.5"/><circle cx="8" cy="12" r="1.6" fill="currentColor" stroke="none"/><circle cx="13" cy="10" r="1.2" fill="currentColor" stroke="none"/><circle cx="16" cy="14" r="1.2" fill="currentColor" stroke="none"/></svg></div>
+          <div class="code">SMT · ASSY</div>
+          <h4 data-en="SMT Assembly" data-ko="실장기판 제조">실장기판 제조</h4>
+          <p data-en="Surface-mount assembly of populated boards with consistent quality." data-ko="일관된 품질의 표면실장(SMT) 기판 조립.">일관된 품질의 표면실장(SMT) 기판 조립.</p>
+        </div>
+        <div class="cap reveal d2">
+          <div class="cico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7"><path d="M3 12h6M15 12h6M9 5v14M15 5v14" stroke-linecap="round"/></svg></div>
+          <div class="code">CAP · PASSIVE</div>
+          <h4 data-en="Capacitors" data-ko="전자축전기">전자축전기</h4>
+          <p data-en="Capacitors for energy storage and signal conditioning across applications." data-ko="에너지 저장과 신호 처리를 위한 다양한 축전기.">에너지 저장과 신호 처리를 위한 다양한 축전기.</p>
+        </div>
+        <div class="cap reveal">
+          <div class="cico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7"><path d="M2 12h4l2-5 4 10 4-10 2 5h4" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
+          <div class="code">RES · PASSIVE</div>
+          <h4 data-en="Resistors" data-ko="전자저항기">전자저항기</h4>
+          <p data-en="Precision resistors that hold tolerance where circuits demand it." data-ko="회로가 요구하는 허용오차를 지키는 정밀 저항기.">회로가 요구하는 허용오차를 지키는 정밀 저항기.</p>
+        </div>
+        <div class="cap reveal d1">
+          <div class="cico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7"><path d="M2 12h3l2-6 3 12 3-12 2 6h3" stroke-linecap="round" stroke-linejoin="round"/><circle cx="12" cy="12" r="10" opacity=".35"/></svg></div>
+          <div class="code">XTAL · OSC</div>
+          <h4 data-en="Crystal Oscillators" data-ko="수정 진동자">수정 진동자</h4>
+          <p data-en="Quartz crystal oscillators delivering stable, accurate timing." data-ko="안정적이고 정확한 클럭을 제공하는 수정 진동자.">안정적이고 정확한 클럭을 제공하는 수정 진동자.</p>
+        </div>
+        <div class="cap reveal d2">
+          <div class="cico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7"><path d="M3 13l2-5h14l2 5v5h-3M3 18v-5M6 18h12" stroke-linecap="round" stroke-linejoin="round"/><circle cx="7.5" cy="18" r="1.6"/><circle cx="16.5" cy="18" r="1.6"/></svg></div>
+          <div class="code">AUTO · GRADE</div>
+          <h4 data-en="Automotive Parts" data-ko="자동차 관련제품">자동차 관련제품</h4>
+          <p data-en="Components built to the reliability standards of automotive electronics." data-ko="차량용 전자장치의 신뢰성 기준을 충족하는 부품.">차량용 전자장치의 신뢰성 기준을 충족하는 부품.</p>
+        </div>
+      </div>
+
+      <div class="cap-group-label reveal" data-en="Trade · Beyond" data-ko="무역 · 그 외 사업">무역 · 그 외 사업</div>
+      <div class="cap-grid" style="margin-bottom:0;">
+        <div class="cap reveal">
+          <div class="cico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7"><circle cx="12" cy="12" r="9"/><path d="M3 12h18M12 3c2.6 2.6 2.6 15.4 0 18M12 3c-2.6 2.6-2.6 15.4 0 18"/></svg></div>
+          <div class="code">TRADE · INTL</div>
+          <h4 data-en="Global Trade" data-ko="무역">무역</h4>
+          <p data-en="Import & export operations bridging Korean supply and world demand." data-ko="대한민국의 공급과 세계의 수요를 잇는 수출입 사업.">대한민국의 공급과 세계의 수요를 잇는 수출입 사업.</p>
+        </div>
+        <div class="cap reveal d1">
+          <div class="cico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7"><path d="M3 8l9-5 9 5v8l-9 5-9-5V8z" stroke-linejoin="round"/><path d="M3 8l9 5 9-5M12 13v8"/></svg></div>
+          <div class="code">GOODS · DIST</div>
+          <h4 data-en="General Merchandise" data-ko="잡화">잡화</h4>
+          <p data-en="A flexible merchandise line that extends our distribution reach." data-ko="유통 역량을 확장하는 유연한 잡화 사업.">유통 역량을 확장하는 유연한 잡화 사업.</p>
+        </div>
+        <div class="cap reveal d2">
+          <div class="cico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7"><path d="M3 21h18M5 21V7l7-4 7 4v14" stroke-linejoin="round"/><path d="M9 21v-5h6v5M9 9h2M13 9h2M9 13h2M13 13h2" stroke-linecap="round"/></svg></div>
+          <div class="code">REAL · ESTATE</div>
+          <h4 data-en="Real Estate" data-ko="부동산">부동산</h4>
+          <p data-en="Real-estate holdings that anchor and diversify the business." data-ko="사업의 기반을 다지고 포트폴리오를 다각화하는 부동산.">사업의 기반을 다지고 포트폴리오를 다각화하는 부동산.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============ WHY ============ -->
+  <section class="block" id="why">
+    <div class="wrap">
+      <div class="sec-head reveal">
+        <span class="eyebrow" data-en="03 — Why NOVIX" data-ko="03 — 강점">03 — 강점</span>
+        <h2 data-en="Built to be the dependable link." data-ko="신뢰할 수 있는 연결고리.">신뢰할 수 있는 연결고리.</h2>
+      </div>
+      <div class="why-grid reveal d1">
+        <div class="why-cell">
+          <div class="n">01</div>
+          <h4 data-en="One-stop chain" data-ko="원스톱 체인">원스톱 체인</h4>
+          <p data-en="From fabrication to delivery under a single accountable partner." data-ko="제조부터 납품까지, 하나의 책임 있는 파트너가 담당합니다.">제조부터 납품까지, 하나의 책임 있는 파트너가 담당합니다.</p>
+        </div>
+        <div class="why-cell">
+          <div class="n">02</div>
+          <h4 data-en="Global sourcing" data-ko="글로벌 소싱">글로벌 소싱</h4>
+          <p data-en="A trade network that reaches the right suppliers across markets." data-ko="시장 전반에서 최적의 공급처에 닿는 무역 네트워크.">시장 전반에서 최적의 공급처에 닿는 무역 네트워크.</p>
+        </div>
+        <div class="why-cell">
+          <div class="n">03</div>
+          <h4 data-en="Quality first" data-ko="품질 우선">품질 우선</h4>
+          <p data-en="Tolerances held and specifications met, batch after batch." data-ko="모든 생산에서 허용오차와 사양을 일관되게 지킵니다.">모든 생산에서 허용오차와 사양을 일관되게 지킵니다.</p>
+        </div>
+        <div class="why-cell">
+          <div class="n">04</div>
+          <h4 data-en="Speed & response" data-ko="속도와 대응">속도와 대응</h4>
+          <p data-en="The responsiveness global partners expect, without the friction." data-ko="글로벌 파트너가 기대하는 민첩한 대응을 마찰 없이.">글로벌 파트너가 기대하는 민첩한 대응을 마찰 없이.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============ NETWORK ============ -->
+  <section class="block" id="network">
+    <div class="wrap">
+      <div class="net-grid">
+        <div class="reveal">
+          <div class="sec-head" style="margin-bottom:34px;">
+            <span class="eyebrow" data-en="04 — Global Network" data-ko="04 — 글로벌 네트워크">04 — 글로벌 네트워크</span>
+            <h2 data-en="Components, beyond borders." data-ko="전자부품, 국경을 넘어.">전자부품, 국경을 넘어.</h2>
+            <p data-en="From our Seoul base, NOVIX is building trade connections across key electronics markets." data-ko="서울을 거점으로, 노빅스는 핵심 전자산업 시장 전반에 무역 네트워크를 구축하고 있습니다.">서울을 거점으로, 노빅스는 핵심 전자산업 시장 전반에 무역 네트워크를 구축하고 있습니다.</p>
+          </div>
+          <div class="regions">
+            <div class="region"><div class="rname"><span class="dot"></span><b data-en="East Asia" data-ko="동아시아">동아시아</b></div><span class="rtag" data-en="HQ · Korea" data-ko="본사 · 대한민국">본사 · 대한민국</span></div>
+            <div class="region"><div class="rname"><span class="dot"></span><b data-en="Southeast Asia" data-ko="동남아시아">동남아시아</b></div><span class="rtag" data-en="Sourcing" data-ko="소싱">소싱</span></div>
+            <div class="region"><div class="rname"><span class="dot"></span><b data-en="North America" data-ko="북미">북미</b></div><span class="rtag" data-en="Trade" data-ko="무역">무역</span></div>
+            <div class="region"><div class="rname"><span class="dot"></span><b data-en="Europe" data-ko="유럽">유럽</b></div><span class="rtag" data-en="Trade" data-ko="무역">무역</span></div>
+          </div>
+        </div>
+        <div class="net-visual reveal d1">
+          <svg viewBox="0 0 420 360" width="100%" height="100%" aria-hidden="true">
+            <defs>
+              <radialGradient id="gp" cx="50%" cy="30%" r="80%">
+                <stop offset="0%" stop-color="#fff"/><stop offset="100%" stop-color="#EEF2FA"/>
+              </radialGradient>
+            </defs>
+            <rect width="420" height="360" fill="url(#gp)"/>
+            <!-- dotted globe field -->
+            <g fill="#C8D2E6">
+              <circle cx="60" cy="80" r="2"/><circle cx="90" cy="70" r="2"/><circle cx="120" cy="90" r="2"/><circle cx="150" cy="75" r="2"/><circle cx="180" cy="95" r="2"/>
+              <circle cx="80" cy="120" r="2"/><circle cx="110" cy="130" r="2"/><circle cx="140" cy="120" r="2"/><circle cx="170" cy="135" r="2"/><circle cx="200" cy="125" r="2"/>
+              <circle cx="240" cy="100" r="2"/><circle cx="270" cy="115" r="2"/><circle cx="300" cy="95" r="2"/><circle cx="330" cy="120" r="2"/><circle cx="360" cy="105" r="2"/>
+              <circle cx="220" cy="160" r="2"/><circle cx="255" cy="175" r="2"/><circle cx="290" cy="160" r="2"/><circle cx="320" cy="180" r="2"/><circle cx="350" cy="165" r="2"/>
+              <circle cx="100" cy="200" r="2"/><circle cx="140" cy="215" r="2"/><circle cx="180" cy="205" r="2"/><circle cx="120" cy="250" r="2"/><circle cx="160" cy="260" r="2"/>
+              <circle cx="250" cy="240" r="2"/><circle cx="290" cy="255" r="2"/><circle cx="320" cy="240" r="2"/><circle cx="280" cy="290" r="2"/><circle cx="240" cy="295" r="2"/>
+            </g>
+            <!-- HQ + connections -->
+            <g stroke="#3E6AE1" stroke-width="1.3" fill="none" opacity=".55">
+              <path d="M300 95 Q230 40 150 75"/>
+              <path d="M300 95 Q330 170 290 255"/>
+              <path d="M300 95 Q200 130 140 215"/>
+              <path d="M300 95 Q360 60 360 105"/>
+            </g>
+            <circle cx="300" cy="95" r="7" fill="#3E6AE1"/>
+            <circle cx="300" cy="95" r="7" fill="none" stroke="#3E6AE1" stroke-width="1.5">
+              <animate attributeName="r" values="7;18;7" dur="3s" repeatCount="indefinite"/>
+              <animate attributeName="opacity" values=".7;0;.7" dur="3s" repeatCount="indefinite"/>
+            </circle>
+            <g fill="#0A1530">
+              <circle cx="150" cy="75" r="4"/><circle cx="290" cy="255" r="4"/><circle cx="140" cy="215" r="4"/><circle cx="360" cy="105" r="4"/>
+            </g>
+            <text x="300" y="82" font-family="JetBrains Mono, monospace" font-size="9" fill="#0A1530" text-anchor="middle" letter-spacing="1">SEOUL</text>
+          </svg>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============ CTA BAND ============ -->
+  <section class="cta-band">
+    <div class="glow"></div>
+    <div class="gridlines"></div>
+    <div class="wrap cta-band-inner">
+      <span class="eyebrow" data-en="Let's build the next circuit" data-ko="다음 회로를 함께">다음 회로를 함께</span>
+      <h2 data-en="Powering the next circuit." data-ko="다음 회로를 잇는 힘.">다음 회로를 잇는 힘.</h2>
+      <p data-en="Looking for a dependable components partner? Let's talk about what you need to move." data-ko="신뢰할 수 있는 부품 파트너를 찾고 계신가요? 필요한 것을 함께 논의하겠습니다.">신뢰할 수 있는 부품 파트너를 찾고 계신가요? 필요한 것을 함께 논의하겠습니다.</p>
+      <a href="#contact" class="btn btn-on-dark" data-en="Contact our team" data-ko="문의하기">문의하기
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="width:16px;height:16px;"><path d="M5 12h14M13 6l6 6-6 6" stroke-linecap="round" stroke-linejoin="round"/></svg>
+      </a>
+    </div>
+  </section>
+
+  <!-- ============ CONTACT ============ -->
+  <section class="block" id="contact">
+    <div class="wrap">
+      <div class="sec-head reveal" style="text-align:center;margin:0 auto 56px;">
+        <span class="eyebrow" style="justify-content:center;" data-en="05 — Contact" data-ko="05 — 문의">05 — 문의</span>
+        <h2 data-en="Get in touch." data-ko="문의하기.">문의하기.</h2>
+      </div>
+      <div class="contact-grid">
+        <div class="contact-info reveal">
+          <div class="ci-row">
+            <div class="ci-k" data-en="Company" data-ko="법인명">법인명</div>
+            <div class="ci-v" data-en="NOVIX Co., Ltd.<span>주식회사 노빅스</span>" data-ko="주식회사 노빅스<span>NOVIX Co., Ltd.</span>">주식회사 노빅스<span>NOVIX Co., Ltd.</span></div>
+          </div>
+          <div class="ci-row">
+            <div class="ci-k" data-en="Headquarters" data-ko="본사">본사</div>
+            <div class="ci-v" data-en="Teheran-ro, Gangnam-gu, Seoul, Korea" data-ko="서울특별시 강남구 테헤란로">서울특별시 강남구 테헤란로</div>
+          </div>
+          <div class="ci-row">
+            <div class="ci-k" data-en="General Inquiries" data-ko="일반 문의">일반 문의</div>
+            <div class="ci-v"><a href="mailto:info@novixint.com">info@novixint.com</a></div>
+          </div>
+          <div class="ci-row">
+            <div class="ci-k" data-en="Sales" data-ko="영업 문의">영업 문의</div>
+            <div class="ci-v"><a href="mailto:sales@novixint.com">sales@novixint.com</a></div>
+          </div>
+          <div class="ci-row">
+            <div class="ci-k" data-en="Business" data-ko="사업 분야">사업 분야</div>
+            <div class="ci-v" data-en="Manufacturing · Wholesale · Global Trade" data-ko="제조업 · 도매업 · 무역">제조업 · 도매업 · 무역</div>
+          </div>
+        </div>
+
+        <form class="contact-form reveal d1" id="cform">
+          <div class="field-row">
+            <div class="field">
+              <label for="f-name" data-en="Name" data-ko="이름">이름</label>
+              <input id="f-name" type="text" name="name" autocomplete="name" required>
+            </div>
+            <div class="field">
+              <label for="f-company" data-en="Company" data-ko="회사">회사</label>
+              <input id="f-company" type="text" name="company" autocomplete="organization">
+            </div>
+          </div>
+          <div class="field">
+            <label for="f-email" data-en="Email" data-ko="이메일">이메일</label>
+            <input id="f-email" type="email" name="email" autocomplete="email" required>
+          </div>
+          <div class="field">
+            <label for="f-message" data-en="Message" data-ko="문의 내용">문의 내용</label>
+            <textarea id="f-message" name="message" rows="5" required></textarea>
+          </div>
+          <button type="submit" class="btn btn-primary" data-en="Send message" data-ko="문의 보내기">문의 보내기
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 2L11 13M22 2l-7 20-4-9-9-4 20-7z" stroke-linecap="round" stroke-linejoin="round"/></svg>
+          </button>
+        </form>
+      </div>
+    </div>
+  </section>
+</main>
+
+<!-- ============ FOOTER ============ -->
+<footer class="site">
+  <div class="wrap">
+    <div class="footer-grid">
+      <div class="footer-brand">
+        <div class="flogo">
+          <svg class="vmark" viewBox="0 0 100 100" aria-hidden="true"><path class="a" d="M12 34 L44 78"/><path class="b" d="M44 78 L94 12"/></svg>
+          <span class="ftext">NOVIX</span>
+        </div>
+        <p data-en="Electronic components manufacturing, distribution and global trade. Components, beyond borders." data-ko="전자부품 제조·유통 및 글로벌 무역. 전자부품, 국경을 넘어.">전자부품 제조·유통 및 글로벌 무역. 전자부품, 국경을 넘어.</p>
+      </div>
+      <div class="footer-col">
+        <h5 data-en="Navigate" data-ko="바로가기">바로가기</h5>
+        <a href="#about" data-en="About" data-ko="회사소개">회사소개</a>
+        <a href="#capabilities" data-en="Capabilities" data-ko="사업영역">사업영역</a>
+        <a href="#network" data-en="Network" data-ko="글로벌 네트워크">글로벌 네트워크</a>
+        <a href="#contact" data-en="Contact" data-ko="문의">문의</a>
+      </div>
+      <div class="footer-col">
+        <h5 data-en="Contact" data-ko="연락처">연락처</h5>
+        <a href="mailto:info@novixint.com">info@novixint.com</a>
+        <a href="mailto:sales@novixint.com">sales@novixint.com</a>
+        <p data-en="Gangnam-gu, Seoul" data-ko="서울 강남구 테헤란로">서울 강남구 테헤란로</p>
+        <p>novixint.com</p>
+      </div>
+    </div>
+    <div class="footer-bottom">
+      <span>© 2026 NOVIX CO., LTD. · 주식회사 노빅스</span>
+      <span data-en="Powering the next circuit." data-ko="다음 회로를 잇는 힘.">다음 회로를 잇는 힘.</span>
+    </div>
+  </div>
+</footer>
+
+<script>
+(function(){
+  /* ---------- Language toggle ---------- */
+  var STORE='novix-lang';
+  var html=document.documentElement;
+  function apply(lang){
+    html.setAttribute('lang',lang);
+    html.setAttribute('data-lang',lang);
+    document.querySelectorAll('[data-'+lang+']').forEach(function(el){
+      el.innerHTML=el.getAttribute('data-'+lang);
+    });
+    document.querySelectorAll('.lang button').forEach(function(b){
+      b.classList.toggle('active', b.getAttribute('data-set')===lang);
+    });
+    try{localStorage.setItem(STORE,lang);}catch(e){}
+  }
+  document.querySelectorAll('.lang button').forEach(function(b){
+    b.addEventListener('click',function(){apply(b.getAttribute('data-set'));});
+  });
+  var saved='en';
+  try{saved=localStorage.getItem(STORE)||'en';}catch(e){}
+  apply(saved);
+
+  /* ---------- Header scroll state ---------- */
+  var hdr=document.getElementById('hdr');
+  function onScroll(){hdr.classList.toggle('scrolled',window.scrollY>12);}
+  onScroll();window.addEventListener('scroll',onScroll,{passive:true});
+
+  /* ---------- Mobile menu ---------- */
+  var burger=document.getElementById('burger'),links=document.getElementById('navLinks');
+  burger.addEventListener('click',function(){links.classList.toggle('open');});
+  links.querySelectorAll('a').forEach(function(a){a.addEventListener('click',function(){links.classList.remove('open');});});
+
+  /* ---------- Reveal on scroll ---------- */
+  var io=new IntersectionObserver(function(entries){
+    entries.forEach(function(e){if(e.isIntersecting){e.target.classList.add('in');io.unobserve(e.target);}});
+  },{threshold:.14,rootMargin:'0px 0px -8% 0px'});
+  document.querySelectorAll('.reveal').forEach(function(el){io.observe(el);});
+
+  /* ---------- Contact form -> mailto ---------- */
+  var form=document.getElementById('cform');
+  form.addEventListener('submit',function(e){
+    e.preventDefault();
+    var f=form.elements;
+    var lang=html.getAttribute('data-lang');
+    var subj=(lang==='ko'?'[NOVIX 문의] ':'[NOVIX Inquiry] ')+(f.company.value||f.name.value);
+    var body=(lang==='ko'
+      ?('이름: '+f.name.value+'\n회사: '+f.company.value+'\n이메일: '+f.email.value+'\n\n'+f.message.value)
+      :('Name: '+f.name.value+'\nCompany: '+f.company.value+'\nEmail: '+f.email.value+'\n\n'+f.message.value));
+    window.location.href='mailto:sales@novixint.com?subject='+encodeURIComponent(subj)+'&body='+encodeURIComponent(body);
+  });
+})();
+</script>
+</body>
+</html>
