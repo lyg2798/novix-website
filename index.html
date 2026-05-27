@@ -14,56 +14,36 @@
 <link href="https://fonts.googleapis.com/css2?family=Archivo:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet" />
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/static/pretendard.css" />
 
-<!-- pre-paint language state (avoids flash) -->
-<script>try{if(localStorage.getItem('novix-lang')==='en')document.documentElement.classList.add('hide-korean');}catch(e){}</script>
+<!-- pre-paint language (sets lang; default content is English so no flash on EN) -->
+<script>try{document.documentElement.lang=localStorage.getItem('novix-lang')||'en';}catch(e){}</script>
 
 <style>
   :root{
-    /* Surfaces */
     --paper:#f4f5f7; --paper-2:#eceef1; --surface:#ffffff;
     --ink:#0c1117; --ink-2:#1c232c; --ink-3:#2a3540;
-    /* Text */
     --text:#0c1117; --muted:#6a7280; --muted-2:#98a0aa; --muted-3:#b9c0c8;
-    /* Lines */
     --hair:#dbe0e5; --hair-2:#e7eaee; --hair-3:#f0f2f4;
-    /* Cool accent (used sparingly) */
     --steel:#2a3540; --signal:#4a8fbf; --signal-2:#6ea8d0;
-    /* Type */
     --sans-b:"Archivo","Pretendard","Helvetica Neue",Helvetica,Arial,sans-serif;
     --mono:"JetBrains Mono","Pretendard",ui-monospace,"SF Mono",Menlo,monospace;
-    /* Layout */
-    --gx:48px;
-    --maxw:1440px;
+    --gx:48px; --maxw:1440px;
   }
-
   *{box-sizing:border-box;margin:0;padding:0;}
   html{scroll-behavior:smooth;-webkit-text-size-adjust:100%;}
-  body{
-    background:var(--paper-2);
-    color:var(--text);
-    font-family:var(--sans-b);
-    font-feature-settings:"ss01","cv11";
-    font-variant-numeric:tabular-nums;
-    -webkit-font-smoothing:antialiased;
-    line-height:1.4;
-    overflow-x:hidden;
-  }
+  body{background:var(--paper-2);color:var(--text);font-family:var(--sans-b);font-feature-settings:"ss01","cv11";font-variant-numeric:tabular-nums;-webkit-font-smoothing:antialiased;line-height:1.4;overflow-x:hidden;}
   ::selection{background:var(--ink);color:var(--paper);}
   a{color:inherit;text-decoration:none;}
   button{font:inherit;border:0;background:transparent;cursor:pointer;color:inherit;}
   img{display:block;max-width:100%;}
   h1,h2,h3,h4,h5,p{margin:0;text-wrap:pretty;}
   .display{font-family:var(--sans-b);font-weight:700;letter-spacing:-0.03em;line-height:0.94;}
-
-  /* hide-korean toggle: only Korean-only text carries .kr */
-  html.hide-korean .kr{display:none !important;}
+  /* Korean display headings read better slightly looser & not forced-tight */
+  html[lang="ko"] .sec-head h2,html[lang="ko"] .cta-strip h2{letter-spacing:-0.01em;line-height:1.08;}
 
   .site{max-width:var(--maxw);margin:0 auto;background:var(--paper);}
-
   .eyebrow{font-family:var(--mono);font-size:11px;letter-spacing:0.14em;text-transform:uppercase;color:var(--muted);font-weight:500;}
   .eyebrow-num{color:var(--ink);margin-right:10px;}
 
-  /* ---------- BUTTONS ---------- */
   .btn{display:inline-flex;align-items:center;gap:10px;padding:14px 22px;border-radius:999px;font-size:14px;font-weight:500;transition:background .15s,color .15s,border-color .15s,transform .15s;}
   .btn-primary{background:var(--ink);color:var(--paper);}
   .btn-primary:hover{background:var(--ink-2);}
@@ -71,11 +51,8 @@
   .btn-ghost:hover{border-color:var(--ink);}
   .btn .arrow{font-family:var(--mono);}
 
-  /* ---------- NAV ---------- */
-  .nav{position:sticky;top:0;z-index:30;display:flex;align-items:center;justify-content:space-between;
-    padding:14px var(--gx);background:color-mix(in oklab,var(--paper) 86%,transparent);
-    backdrop-filter:saturate(180%) blur(14px);-webkit-backdrop-filter:saturate(180%) blur(14px);
-    border-bottom:1px solid var(--hair-2);}
+  /* NAV */
+  .nav{position:sticky;top:0;z-index:30;display:flex;align-items:center;justify-content:space-between;padding:14px var(--gx);background:color-mix(in oklab,var(--paper) 86%,transparent);backdrop-filter:saturate(180%) blur(14px);-webkit-backdrop-filter:saturate(180%) blur(14px);border-bottom:1px solid var(--hair-2);}
   .nav-logo{display:flex;align-items:center;}
   .nav-logo img{height:22px;width:auto;mix-blend-mode:multiply;}
   .nav-links{display:flex;gap:28px;}
@@ -85,12 +62,12 @@
   .nav-lang{display:flex;align-items:center;gap:6px;font-family:var(--mono);font-size:11px;letter-spacing:0.1em;color:var(--muted);}
   .nav-lang button{color:var(--muted);padding:2px 1px;transition:color .15s;}
   .nav-lang button.active{color:var(--ink);font-weight:600;}
-  .nav-cta{font-family:var(--mono);font-size:11px;letter-spacing:0.14em;text-transform:uppercase;padding:9px 14px;border:1px solid var(--ink);color:var(--ink);border-radius:999px;transition:background .15s,color .15s;}
+  .nav-cta{font-family:var(--mono);font-size:11px;letter-spacing:0.14em;text-transform:uppercase;padding:9px 14px;border:1px solid var(--ink);color:var(--ink);border-radius:999px;transition:background .15s,color .15s;white-space:nowrap;}
   .nav-cta:hover{background:var(--ink);color:var(--paper);}
   .burger{display:none;flex-direction:column;gap:5px;padding:6px;}
   .burger span{width:22px;height:1.5px;background:var(--ink);transition:.3s;}
 
-  /* ---------- HERO ---------- */
+  /* HERO */
   .hero{position:relative;padding:56px var(--gx) 64px;border-bottom:1px solid var(--hair);background:var(--paper);overflow:hidden;}
   .hero-grid{position:absolute;inset:0;pointer-events:none;opacity:0.7;width:100%;height:100%;}
   .hero-frame{position:relative;padding:28px 0;}
@@ -99,15 +76,15 @@
   .hero-corners > i:nth-child(2){top:0;right:0;border-left:0;border-bottom:0;}
   .hero-corners > i:nth-child(3){bottom:0;left:0;border-right:0;border-top:0;}
   .hero-corners > i:nth-child(4){bottom:0;right:0;border-left:0;border-top:0;}
-  .hero-meta{display:flex;justify-content:space-between;align-items:center;gap:18px;flex-wrap:wrap;
-    font-family:var(--mono);font-size:10px;letter-spacing:0.18em;text-transform:uppercase;color:var(--muted);padding:0 0 28px;}
+  .hero-meta{display:flex;justify-content:space-between;align-items:center;gap:18px;flex-wrap:wrap;font-family:var(--mono);font-size:10px;letter-spacing:0.18em;text-transform:uppercase;color:var(--muted);padding:0 0 28px;}
   .hero-meta b{color:var(--ink);font-weight:500;}
   .hero-meta .live{display:inline-flex;align-items:center;gap:8px;}
-  .hero-meta .live .dot{width:6px;height:6px;border-radius:50%;background:var(--signal);animation:dot-pulse 2s ease-in-out infinite;}
+  .hero-meta .live .dot{width:6px;height:6px;border-radius:50%;background:var(--signal);animation:dot-pulse 2s ease-in-out infinite;flex:none;}
+  /* hero headline stays English always */
   .hero-title{font-size:clamp(40px,11.6vw,168px);font-weight:700;letter-spacing:-0.045em;line-height:0.88;text-transform:uppercase;color:var(--ink);}
   .hero-title .thin{font-weight:300;}
   .hero-title .signal{color:var(--signal);}
-  .hero-kr{font-family:var(--mono);font-size:clamp(11px,1.1vw,14px);letter-spacing:0.04em;color:var(--muted);margin-top:24px;}
+  .hero-sub{font-family:var(--mono);font-size:clamp(11px,1.1vw,14px);letter-spacing:0.04em;color:var(--muted);margin-top:24px;}
   .hero-foot{display:grid;grid-template-columns:1.2fr 1fr 1fr 1fr;gap:24px;margin-top:56px;padding-top:24px;border-top:1px solid var(--ink);}
   .hero-foot p{font-size:14px;color:var(--ink-2);line-height:1.55;max-width:340px;}
   .hero-foot .ctas{display:flex;gap:10px;margin-top:16px;flex-wrap:wrap;}
@@ -116,21 +93,20 @@
   .hero-foot dd{margin:0;font-size:24px;font-weight:600;letter-spacing:-0.02em;}
   .hero-foot dd small{display:block;font-size:12px;font-weight:400;color:var(--muted);margin-top:4px;letter-spacing:0;}
 
-  /* ---------- SECTION HEAD ---------- */
-  .sec-head{padding:80px var(--gx) 32px;display:grid;grid-template-columns:1fr auto;gap:32px;align-items:end;border-top:1px solid var(--hair);}
-  .sec-head h2{font-size:clamp(32px,6.4vw,64px);font-weight:700;letter-spacing:-0.035em;line-height:0.96;text-transform:uppercase;margin-top:14px;}
-  .sec-head .right{text-align:right;font-family:var(--mono);font-size:11px;letter-spacing:0.14em;text-transform:uppercase;color:var(--muted);line-height:1.7;}
+  /* SECTION HEAD */
+  .sec-head{padding:80px var(--gx) 32px;border-top:1px solid var(--hair);}
+  .sec-head h2{font-size:clamp(32px,6.4vw,64px);font-weight:700;letter-spacing:-0.035em;line-height:0.96;text-transform:uppercase;margin-top:14px;max-width:980px;}
 
   section{position:relative;}
 
-  /* ---------- ABOUT ---------- */
+  /* ABOUT */
   .about{padding:0 var(--gx) 80px;}
   .about-grid{display:grid;grid-template-columns:240px 1fr;gap:32px;padding-top:24px;}
   .about-grid .sidekr{font-family:var(--mono);font-size:11px;color:var(--muted);letter-spacing:0.04em;line-height:1.6;}
   .about-grid .sidekr b{color:var(--ink);}
   .about-grid .lead p{font-size:18px;line-height:1.5;margin-bottom:16px;color:var(--ink);}
 
-  /* ---------- CAPABILITIES ---------- */
+  /* CAPABILITIES */
   .cap{padding:0 var(--gx) 80px;}
   .cap-section-h{font-family:var(--mono);font-size:11px;letter-spacing:0.18em;text-transform:uppercase;color:var(--ink);padding:28px 0 8px;display:flex;justify-content:space-between;}
   .cap-section-h span:last-child{color:var(--muted);}
@@ -147,17 +123,16 @@
   .cap-row .schem{width:72px;height:36px;color:var(--ink);opacity:0.9;justify-self:end;}
   .cap-row .schem svg{width:72px;height:36px;}
 
-  /* ---------- STRENGTHS ---------- */
+  /* STRENGTHS */
   .strengths{padding:0 var(--gx) 80px;}
   .str-grid{display:grid;grid-template-columns:repeat(4,1fr);border-top:1px solid var(--ink);border-left:1px solid var(--hair);}
-  .str{border-right:1px solid var(--hair);border-bottom:1px solid var(--hair);padding:28px 24px;min-height:260px;display:flex;flex-direction:column;background:var(--paper);}
+  .str{border-right:1px solid var(--hair);border-bottom:1px solid var(--hair);padding:28px 24px;min-height:240px;display:flex;flex-direction:column;background:var(--paper);}
   .str-head{display:flex;justify-content:space-between;font-family:var(--mono);font-size:11px;letter-spacing:0.16em;text-transform:uppercase;color:var(--muted);margin-bottom:40px;}
   .str-head .n{color:var(--ink);}
-  .str h4{font-size:22px;font-weight:700;letter-spacing:-0.015em;line-height:1.1;margin-bottom:12px;}
-  .str .kr{font-family:var(--mono);font-size:11px;color:var(--muted);margin-bottom:14px;letter-spacing:0.04em;}
+  .str h4{font-size:22px;font-weight:700;letter-spacing:-0.015em;line-height:1.15;margin-bottom:12px;}
   .str p{font-size:13px;color:var(--ink-2);line-height:1.55;}
 
-  /* ---------- NETWORK ---------- */
+  /* NETWORK */
   .net{padding:0 var(--gx) 80px;}
   .net-frame{position:relative;background:var(--paper);border:1px solid var(--ink);height:560px;overflow:hidden;}
   .net-coord{position:absolute;font-family:var(--mono);font-size:10px;letter-spacing:0.08em;color:var(--muted);}
@@ -168,7 +143,7 @@
   .net-side .row span{color:var(--muted);}
   #arcsMap{width:100%;height:100%;}
 
-  /* ---------- CTA STRIP ---------- */
+  /* CTA STRIP */
   .cta-strip{background:var(--ink);color:var(--paper);padding:96px var(--gx);position:relative;overflow:hidden;}
   .cta-strip .inner{position:relative;z-index:1;max-width:900px;}
   .cta-strip h2{font-size:clamp(40px,6.6vw,96px);font-weight:700;letter-spacing:-0.04em;line-height:0.94;text-transform:uppercase;color:var(--paper);}
@@ -177,13 +152,12 @@
   .cta-strip .btn-primary{background:var(--paper);color:var(--ink);margin-top:32px;}
   .cta-strip .btn-primary:hover{background:#fff;transform:translateY(-1px);}
 
-  /* ---------- CONTACT ---------- */
+  /* CONTACT */
   .contact{padding:0 var(--gx) 80px;}
   .contact-grid{display:grid;grid-template-columns:0.8fr 1.5fr;gap:64px;padding-top:24px;}
   .contact-info dl{display:flex;flex-direction:column;gap:22px;margin:0;}
   .contact-info dt{font-family:var(--mono);font-size:10px;letter-spacing:0.16em;text-transform:uppercase;color:var(--muted);margin-bottom:4px;}
   .contact-info dd{margin:0;font-size:15px;color:var(--ink);}
-  .contact-info dd small{display:block;color:var(--muted);font-size:12px;margin-top:2px;}
   .contact-info dd a:hover{color:var(--signal);}
   .form{display:grid;grid-template-columns:1fr 1fr;gap:24px 32px;}
   .form .full{grid-column:1 / -1;}
@@ -196,7 +170,7 @@
   .form .submit-row{display:flex;justify-content:space-between;align-items:center;gap:18px;flex-wrap:wrap;}
   .form .note{font-family:var(--mono);font-size:11px;letter-spacing:0.14em;text-transform:uppercase;color:var(--muted);}
 
-  /* ---------- FOOTER ---------- */
+  /* FOOTER */
   footer.site-footer{background:var(--paper-2);color:var(--ink-2);padding:56px var(--gx) 24px;border-top:1px solid var(--ink);}
   footer.site-footer .row1{display:grid;grid-template-columns:2.4fr 1fr 1fr;gap:32px;padding-bottom:40px;}
   footer.site-footer .wordmark img{height:20px;width:auto;mix-blend-mode:multiply;margin-bottom:14px;}
@@ -207,7 +181,7 @@
   footer.site-footer ul a:hover{color:var(--ink);}
   footer.site-footer .row2{padding-top:18px;border-top:1px solid var(--hair);display:flex;justify-content:space-between;gap:12px;flex-wrap:wrap;font-family:var(--mono);font-size:10px;letter-spacing:0.16em;text-transform:uppercase;color:var(--muted);}
 
-  /* ---------- ANIMATIONS ---------- */
+  /* ANIMATIONS */
   @keyframes dot-pulse{0%,100%{opacity:0.35;box-shadow:0 0 0 0 var(--signal);}50%{opacity:1;box-shadow:0 0 0 4px color-mix(in oklab,var(--signal) 30%,transparent);}}
   @keyframes pulse-node{0%,100%{opacity:0.25;r:2.5;}50%{opacity:1;r:4;}}
   @keyframes trace-dash{to{stroke-dashoffset:-200;}}
@@ -218,10 +192,8 @@
   .arc-path{stroke-dasharray:600;animation:arc-draw 3.5s ease-out forwards;}
   .arc-node-ring{transform-origin:center;transform-box:fill-box;animation:node-ping 3s ease-out infinite;}
 
-  /* ---------- RESPONSIVE ---------- */
-  @media (max-width:1080px){
-    .nav-links{gap:20px;}
-  }
+  /* RESPONSIVE */
+  @media (max-width:1080px){.nav-links{gap:20px;}}
   @media (max-width:900px){
     :root{--gx:28px;}
     .burger{display:flex;}
@@ -233,16 +205,12 @@
     .hero-foot > div:first-child{grid-column:1 / -1;}
     .about-grid{grid-template-columns:1fr;gap:24px;}
     .str-grid{grid-template-columns:repeat(2,1fr);}
-    .str{min-height:210px;}
     .contact-grid{grid-template-columns:1fr;gap:40px;}
     .net-frame{height:440px;}
   }
   @media (max-width:720px){
-    .sec-head{grid-template-columns:1fr;gap:14px;}
-    .sec-head .right{text-align:left;}
     .hero-meta{font-size:9px;gap:10px;}
     footer.site-footer .row1{grid-template-columns:1fr;gap:28px;}
-    /* capabilities reflow to spec list */
     .cap-row{grid-template-columns:auto 1fr;grid-template-areas:"num code" "num title" "num cat";gap:4px 16px;align-items:start;padding:18px 0;}
     .cap-row:hover{padding-left:0;}
     .cap-row .num{grid-area:num;padding-top:2px;}
@@ -278,17 +246,17 @@
   <header class="nav">
     <a href="#top" class="nav-logo" aria-label="NOVIX home"><img src="assets/novix-wordmark.png" alt="NOVIX" /></a>
     <nav class="nav-links" id="navLinks">
-      <a href="#about">About</a>
-      <a href="#capabilities">Capabilities</a>
-      <a href="#strengths">Strengths</a>
-      <a href="#network">Network</a>
-      <a href="#contact">Contact</a>
+      <a href="#about" data-en="About" data-ko="회사소개">About</a>
+      <a href="#capabilities" data-en="Capabilities" data-ko="사업영역">Capabilities</a>
+      <a href="#strengths" data-en="Strengths" data-ko="강점">Strengths</a>
+      <a href="#network" data-en="Network" data-ko="네트워크">Network</a>
+      <a href="#contact" data-en="Contact" data-ko="문의">Contact</a>
     </nav>
     <div class="nav-right">
       <div class="nav-lang" role="group" aria-label="Language">
-        <button data-lang="ko" class="active">KO</button><span>/</span><button data-lang="en">EN</button>
+        <button data-lang="en" class="active">EN</button><span>/</span><button data-lang="ko">KO</button>
       </div>
-      <a href="#contact" class="nav-cta">Inquire</a>
+      <a href="#contact" class="nav-cta" data-en="Inquire" data-ko="문의하기">Inquire</a>
       <button class="burger" id="burger" aria-label="Menu"><span></span><span></span><span></span></button>
     </div>
   </header>
@@ -301,26 +269,27 @@
     <div class="hero-frame">
       <div class="hero-corners" aria-hidden="true"><i></i><i></i><i></i><i></i></div>
       <div class="hero-meta">
-        <span><b>FILE</b> · NOVIX_CO_LTD · 2026-REV-A</span>
-        <span><b>SECTOR</b> · ELECTRONIC COMPONENTS<span class="kr"> · 전자부품</span></span>
-        <span class="live"><span class="dot"></span><b>OPERATING</b> · SEOUL 37.5°N</span>
+        <span data-en="<b>FILE</b> · NOVIX_CO_LTD · 2026-REV-A" data-ko="<b>문서</b> · NOVIX_CO_LTD · 2026-REV-A"><b>FILE</b> · NOVIX_CO_LTD · 2026-REV-A</span>
+        <span data-en="<b>SECTOR</b> · ELECTRONIC COMPONENTS" data-ko="<b>분야</b> · 전자부품"><b>SECTOR</b> · ELECTRONIC COMPONENTS</span>
+        <span class="live"><span class="dot"></span><span data-en="<b>OPERATING</b> · SEOUL 37.5°N" data-ko="<b>가동중</b> · 서울 37.5°N"><b>OPERATING</b> · SEOUL 37.5°N</span></span>
       </div>
 
+      <!-- big hero text stays English in both languages -->
       <h1 class="display hero-title">COMPONENTS<br /><span class="thin">BEYOND</span><br />BORDERS<span class="signal">.</span></h1>
 
-      <p class="hero-kr kr">국경 너머의 회로를 잇는 신뢰의 부품 파트너 · 다음 회로를 잇는 힘.</p>
+      <p class="hero-sub" data-en="A trusted electronic-components partner, connecting circuits beyond borders." data-ko="국경 너머의 회로를 잇는 신뢰의 부품 파트너 · 다음 회로를 잇는 힘.">A trusted electronic-components partner, connecting circuits beyond borders.</p>
 
       <div class="hero-foot">
         <div>
-          <p>NOVIX is a Seoul-headquartered manufacturer and distributor of electronic components. We integrate manufacture, distribution and international trade across nine business lines.</p>
+          <p data-en="NOVIX is a Seoul-headquartered manufacturer and distributor of electronic components. We integrate manufacture, distribution and international trade across nine business lines." data-ko="노빅스는 서울에 본사를 둔 전자부품 제조·유통 기업입니다. 제조, 유통, 국제 무역을 9개 사업 부문에 걸쳐 통합합니다.">NOVIX is a Seoul-headquartered manufacturer and distributor of electronic components. We integrate manufacture, distribution and international trade across nine business lines.</p>
           <div class="ctas">
-            <a href="#capabilities" class="btn btn-primary">View capabilities <span class="arrow">→</span></a>
-            <a href="#contact" class="btn btn-ghost">Sales inquiry</a>
+            <a href="#capabilities" class="btn btn-primary"><span data-en="View capabilities" data-ko="사업영역 보기">View capabilities</span> <span class="arrow">→</span></a>
+            <a href="#contact" class="btn btn-ghost" data-en="Sales inquiry" data-ko="영업 문의">Sales inquiry</a>
           </div>
         </div>
-        <dl><dt>Founded</dt><dd>2026<small class="kr">설립 연도</small></dd></dl>
-        <dl><dt>Lines</dt><dd>09<small>manufacture · trade</small></dd></dl>
-        <dl><dt>Markets</dt><dd>04<small>EA · SEA · NA · EU</small></dd></dl>
+        <dl><dt data-en="Founded" data-ko="설립">Founded</dt><dd>2026<small data-en="incorporated" data-ko="설립 연도">incorporated</small></dd></dl>
+        <dl><dt data-en="Lines" data-ko="사업 부문">Lines</dt><dd>09<small data-en="manufacture · trade" data-ko="제조 · 무역">manufacture · trade</small></dd></dl>
+        <dl><dt data-en="Markets" data-ko="대상 시장">Markets</dt><dd>04<small data-en="EA · SEA · NA · EU" data-ko="동아 · 동남아 · 북미 · 유럽">EA · SEA · NA · EU</small></dd></dl>
       </div>
     </div>
   </section>
@@ -328,28 +297,15 @@
   <!-- ===== ABOUT ===== -->
   <section id="about">
     <div class="sec-head">
-      <div>
-        <div class="eyebrow"><span class="eyebrow-num">01 /</span> About<span class="kr"> · 회사소개</span></div>
-        <h2 class="display">DESIGNED TRUST<br />IN EVERY PART.</h2>
-      </div>
-      <div class="right kr">모든 부품에 신뢰를<br />설계합니다.</div>
+      <div class="eyebrow" data-en='<span class="eyebrow-num">01 /</span> About' data-ko='<span class="eyebrow-num">01 /</span> 회사소개'><span class="eyebrow-num">01 /</span> About</div>
+      <h2 class="display" data-en="DESIGNED TRUST<br />IN EVERY PART." data-ko="모든 부품에<br />신뢰를 설계합니다.">DESIGNED TRUST<br />IN EVERY PART.</h2>
     </div>
     <div class="about">
       <div class="about-grid">
-        <div class="sidekr">
-          <b>SCOPE</b><br />
-          PCB · SMT · CAP · RES<br />
-          XTAL · AUTO · TRADE<br />
-          GOODS · ESTATE<br /><br />
-          <b>MARKETS</b><br />
-          East Asia<br />
-          Southeast Asia<br />
-          North America<br />
-          Europe
-        </div>
+        <div class="sidekr" data-en="<b>SCOPE</b><br>PCB · SMT · CAP · RES<br>XTAL · AUTO · TRADE<br>GOODS · ESTATE<br><br><b>MARKETS</b><br>East Asia<br>Southeast Asia<br>North America<br>Europe" data-ko="<b>사업 범위</b><br>PCB · SMT · CAP · RES<br>XTAL · AUTO · TRADE<br>GOODS · ESTATE<br><br><b>대상 시장</b><br>동아시아<br>동남아시아<br>북미<br>유럽"><b>SCOPE</b><br>PCB · SMT · CAP · RES<br>XTAL · AUTO · TRADE<br>GOODS · ESTATE<br><br><b>MARKETS</b><br>East Asia<br>Southeast Asia<br>North America<br>Europe</div>
         <div class="lead">
-          <p>NOVIX integrates manufacture, distribution and international trade of electronic components into a single, finely tuned operating system — from PCB fabrication and SMT assembly to passive components, crystal oscillators and automotive-grade parts.</p>
-          <p>We move parts across borders to the precision modern electronics demands, combining stable sourcing with the responsiveness global partners expect.</p>
+          <p data-en="NOVIX integrates manufacture, distribution and international trade of electronic components into a single, finely tuned operating system — from PCB fabrication and SMT assembly to passive components, crystal oscillators and automotive-grade parts." data-ko="노빅스는 전자부품의 제조, 유통, 국제 무역을 하나의 정교한 운영 체계로 통합합니다 — PCB 제조와 SMT 조립부터 수동소자, 수정 진동자, 자동차용 부품까지.">NOVIX integrates manufacture, distribution and international trade of electronic components into a single, finely tuned operating system — from PCB fabrication and SMT assembly to passive components, crystal oscillators and automotive-grade parts.</p>
+          <p data-en="We move parts across borders to the precision modern electronics demands, combining stable sourcing with the responsiveness global partners expect." data-ko="현대 전자산업이 요구하는 정밀함으로 부품을 국경 너머로 옮기며, 안정적인 소싱과 글로벌 파트너가 기대하는 대응력을 함께 제공합니다.">We move parts across borders to the precision modern electronics demands, combining stable sourcing with the responsiveness global partners expect.</p>
         </div>
       </div>
     </div>
@@ -358,71 +314,68 @@
   <!-- ===== CAPABILITIES ===== -->
   <section id="capabilities">
     <div class="sec-head">
-      <div>
-        <div class="eyebrow"><span class="eyebrow-num">02 /</span> Capabilities<span class="kr"> · 사업영역</span></div>
-        <h2 class="display">9 LINES.<br />ONE PARTNER.</h2>
-      </div>
-      <div class="right kr">제조부터 납품까지,<br />국경을 넘어.</div>
+      <div class="eyebrow" data-en='<span class="eyebrow-num">02 /</span> Capabilities' data-ko='<span class="eyebrow-num">02 /</span> 사업영역'><span class="eyebrow-num">02 /</span> Capabilities</div>
+      <h2 class="display" data-en="9 LINES.<br />ONE PARTNER." data-ko="9개 사업 부문,<br />하나의 파트너.">9 LINES.<br />ONE PARTNER.</h2>
     </div>
     <div class="cap">
-      <div class="cap-section-h"><span>· MANUFACTURE<span class="kr"> / 제조</span></span><span>06 LINES</span></div>
+      <div class="cap-section-h"><span data-en="· MANUFACTURE" data-ko="· 제조">· MANUFACTURE</span><span data-en="06 LINES" data-ko="6개 부문">06 LINES</span></div>
       <div class="cap-table">
         <div class="cap-row">
           <span class="num">01</span><span class="code">PCB · FAB</span>
-          <div class="title-cell"><span class="en">Printed Circuit Boards</span><span class="sub"><span class="kr">PCB 제조 · </span><span class="desc">Multi-layer PCB design and fabrication to demanding spec.</span></span></div>
-          <span class="cat">Manufacture</span>
+          <div class="title-cell"><span class="en" data-en="Printed Circuit Boards" data-ko="인쇄회로기판(PCB)">Printed Circuit Boards</span><span class="sub" data-en="Multi-layer PCB design and fabrication to demanding spec." data-ko="까다로운 사양에 맞춘 다층 PCB 설계·제조.">Multi-layer PCB design and fabrication to demanding spec.</span></div>
+          <span class="cat" data-en="Manufacture" data-ko="제조">Manufacture</span>
           <div class="schem"><svg viewBox="0 0 72 36" stroke="currentColor" fill="none" stroke-width="1"><path d="M2 6 H22 L28 12 H48 L54 6 H70"/><path d="M2 18 H10 L16 24 H40 L46 18 H70"/><path d="M2 30 H32 L38 24" stroke-opacity="0.5"/><circle cx="22" cy="6" r="1.4" fill="currentColor" stroke="none"/><circle cx="48" cy="12" r="1.4" fill="currentColor" stroke="none"/><circle cx="16" cy="24" r="1.4" fill="currentColor" stroke="none"/><circle cx="40" cy="24" r="1.4" fill="currentColor" stroke="none"/></svg></div>
         </div>
         <div class="cap-row">
           <span class="num">02</span><span class="code">SMT · ASSY</span>
-          <div class="title-cell"><span class="en">SMT Assembly</span><span class="sub"><span class="kr">실장기판 제조 · </span><span class="desc">Surface-mount assembly with consistent quality control.</span></span></div>
-          <span class="cat">Manufacture</span>
+          <div class="title-cell"><span class="en" data-en="SMT Assembly" data-ko="표면실장(SMT) 조립">SMT Assembly</span><span class="sub" data-en="Surface-mount assembly with consistent quality control." data-ko="일관된 품질 관리의 표면실장 기판 조립.">Surface-mount assembly with consistent quality control.</span></div>
+          <span class="cat" data-en="Manufacture" data-ko="제조">Manufacture</span>
           <div class="schem"><svg viewBox="0 0 72 36" stroke="currentColor" fill="none" stroke-width="1"><rect x="6" y="10" width="14" height="16"/><rect x="28" y="6" width="20" height="24"/><rect x="56" y="12" width="10" height="12"/><path d="M6 14 L2 14 M6 22 L2 22 M20 14 L24 14 M20 22 L24 22"/><path d="M28 10 L24 10 M28 26 L24 26 M48 10 L52 10 M48 26 L52 26"/><path d="M56 16 L52 16 M56 20 L52 20 M66 16 L70 16 M66 20 L70 20"/></svg></div>
         </div>
         <div class="cap-row">
           <span class="num">03</span><span class="code">CAP · PASSIVE</span>
-          <div class="title-cell"><span class="en">Capacitors</span><span class="sub"><span class="kr">전자축전기 · </span><span class="desc">Energy storage and signal-conditioning capacitor lines.</span></span></div>
-          <span class="cat">Passive</span>
+          <div class="title-cell"><span class="en" data-en="Capacitors" data-ko="축전기">Capacitors</span><span class="sub" data-en="Energy storage and signal-conditioning capacitor lines." data-ko="에너지 저장·신호 처리를 위한 축전기 라인.">Energy storage and signal-conditioning capacitor lines.</span></div>
+          <span class="cat" data-en="Passive" data-ko="수동소자">Passive</span>
           <div class="schem"><svg viewBox="0 0 72 36" stroke="currentColor" fill="none" stroke-width="1"><path d="M2 18 H32 M40 18 H70"/><path d="M32 6 V30 M40 6 V30" stroke-width="1.4"/><path d="M36 4 L36 8"/><path d="M34 6 L38 6"/></svg></div>
         </div>
         <div class="cap-row">
           <span class="num">04</span><span class="code">RES · PASSIVE</span>
-          <div class="title-cell"><span class="en">Resistors</span><span class="sub"><span class="kr">전자저항기 · </span><span class="desc">Precision resistors holding the tolerances circuits ask.</span></span></div>
-          <span class="cat">Passive</span>
+          <div class="title-cell"><span class="en" data-en="Resistors" data-ko="저항기">Resistors</span><span class="sub" data-en="Precision resistors holding the tolerances circuits ask." data-ko="회로가 요구하는 허용오차를 지키는 정밀 저항기.">Precision resistors holding the tolerances circuits ask.</span></div>
+          <span class="cat" data-en="Passive" data-ko="수동소자">Passive</span>
           <div class="schem"><svg viewBox="0 0 72 36" stroke="currentColor" fill="none" stroke-width="1"><path d="M2 18 H18 L22 10 L28 26 L34 10 L40 26 L46 10 L50 18 H70"/></svg></div>
         </div>
         <div class="cap-row">
           <span class="num">05</span><span class="code">XTAL · OSC</span>
-          <div class="title-cell"><span class="en">Crystal Oscillators</span><span class="sub"><span class="kr">수정 진동자 · </span><span class="desc">Stable, accurate clock sources for timing-critical work.</span></span></div>
-          <span class="cat">Timing</span>
+          <div class="title-cell"><span class="en" data-en="Crystal Oscillators" data-ko="수정 진동자">Crystal Oscillators</span><span class="sub" data-en="Stable, accurate clock sources for timing-critical work." data-ko="타이밍이 중요한 작업을 위한 안정적이고 정확한 클럭원.">Stable, accurate clock sources for timing-critical work.</span></div>
+          <span class="cat" data-en="Timing" data-ko="타이밍">Timing</span>
           <div class="schem"><svg viewBox="0 0 72 36" stroke="currentColor" fill="none" stroke-width="1"><path d="M2 18 H22 M50 18 H70"/><rect x="22" y="10" width="28" height="16"/><path d="M30 14 V22 M42 14 V22" stroke-width="1.4"/></svg></div>
         </div>
         <div class="cap-row">
           <span class="num">06</span><span class="code">AUTO · GRADE</span>
-          <div class="title-cell"><span class="en">Automotive Components</span><span class="sub"><span class="kr">자동차 관련 제품 · </span><span class="desc">Components engineered for automotive reliability standards.</span></span></div>
-          <span class="cat">Auto</span>
+          <div class="title-cell"><span class="en" data-en="Automotive Components" data-ko="자동차 부품">Automotive Components</span><span class="sub" data-en="Components engineered for automotive reliability standards." data-ko="자동차 신뢰성 기준에 맞춰 설계된 부품.">Components engineered for automotive reliability standards.</span></div>
+          <span class="cat" data-en="Auto" data-ko="차량용">Auto</span>
           <div class="schem"><svg viewBox="0 0 72 36" stroke="currentColor" fill="none" stroke-width="1"><rect x="14" y="10" width="44" height="16" rx="3"/><circle cx="22" cy="28" r="3"/><circle cx="50" cy="28" r="3"/><path d="M18 10 L22 4 H50 L54 10"/><path d="M30 10 V18 M42 10 V18" stroke-opacity="0.4"/></svg></div>
         </div>
       </div>
 
-      <div class="cap-section-h" style="margin-top:32px;"><span>· TRADE &amp; BEYOND<span class="kr"> / 무역 외</span></span><span>03 LINES</span></div>
+      <div class="cap-section-h" style="margin-top:32px;"><span data-en="· TRADE &amp; BEYOND" data-ko="· 무역 외">· TRADE &amp; BEYOND</span><span data-en="03 LINES" data-ko="3개 부문">03 LINES</span></div>
       <div class="cap-table">
         <div class="cap-row">
           <span class="num">07</span><span class="code">TRADE · INTL</span>
-          <div class="title-cell"><span class="en">International Trade</span><span class="sub"><span class="kr">무역 · </span><span class="desc">Linking Korean supply to global demand across markets.</span></span></div>
-          <span class="cat">Trade</span>
+          <div class="title-cell"><span class="en" data-en="International Trade" data-ko="국제 무역">International Trade</span><span class="sub" data-en="Linking Korean supply to global demand across markets." data-ko="한국의 공급을 세계 시장의 수요와 연결합니다.">Linking Korean supply to global demand across markets.</span></div>
+          <span class="cat" data-en="Trade" data-ko="무역">Trade</span>
           <div class="schem"><svg viewBox="0 0 72 36" stroke="currentColor" fill="none" stroke-width="1"><circle cx="14" cy="18" r="3"/><circle cx="58" cy="18" r="3"/><path d="M17 18 Q36 -2 55 18"/><path d="M17 18 Q36 38 55 18" stroke-dasharray="3 3"/><path d="M52 15 L55 18 L52 21"/><path d="M20 21 L17 18 L20 15"/></svg></div>
         </div>
         <div class="cap-row">
           <span class="num">08</span><span class="code">GOODS · DIST</span>
-          <div class="title-cell"><span class="en">General Goods</span><span class="sub"><span class="kr">잡화 · </span><span class="desc">A flexible goods business that extends our distribution.</span></span></div>
-          <span class="cat">Trade</span>
+          <div class="title-cell"><span class="en" data-en="General Goods" data-ko="잡화 유통">General Goods</span><span class="sub" data-en="A flexible goods business that extends our distribution." data-ko="유통 역량을 넓히는 유연한 잡화 사업.">A flexible goods business that extends our distribution.</span></div>
+          <span class="cat" data-en="Trade" data-ko="무역">Trade</span>
           <div class="schem"><svg viewBox="0 0 72 36" stroke="currentColor" fill="none" stroke-width="1"><rect x="8" y="8" width="14" height="14"/><rect x="28" y="14" width="14" height="14"/><rect x="48" y="6" width="14" height="14"/><path d="M15 22 V28 H55 V20" stroke-opacity="0.5"/></svg></div>
         </div>
         <div class="cap-row">
           <span class="num">09</span><span class="code">REAL · ESTATE</span>
-          <div class="title-cell"><span class="en">Real Estate</span><span class="sub"><span class="kr">부동산 · </span><span class="desc">A real-estate portfolio that grounds and diversifies the business.</span></span></div>
-          <span class="cat">Other</span>
+          <div class="title-cell"><span class="en" data-en="Real Estate" data-ko="부동산">Real Estate</span><span class="sub" data-en="A real-estate portfolio that grounds and diversifies the business." data-ko="사업의 기반을 다지고 다각화하는 부동산 포트폴리오.">A real-estate portfolio that grounds and diversifies the business.</span></div>
+          <span class="cat" data-en="Other" data-ko="기타">Other</span>
           <div class="schem"><svg viewBox="0 0 72 36" stroke="currentColor" fill="none" stroke-width="1"><path d="M6 30 H66 M10 30 V14 L24 6 L38 14 V30"/><path d="M44 30 V18 L54 12 L64 18 V30" stroke-opacity="0.6"/><rect x="18" y="20" width="6" height="10" stroke-opacity="0.5"/><rect x="28" y="20" width="4" height="6" stroke-opacity="0.5"/></svg></div>
         </div>
       </div>
@@ -432,18 +385,15 @@
   <!-- ===== STRENGTHS ===== -->
   <section id="strengths">
     <div class="sec-head">
-      <div>
-        <div class="eyebrow"><span class="eyebrow-num">03 /</span> Strengths<span class="kr"> · 강점</span></div>
-        <h2 class="display">A LINK<br />YOU CAN TRUST.</h2>
-      </div>
-      <div class="right kr">신뢰할 수 있는<br />연결고리.</div>
+      <div class="eyebrow" data-en='<span class="eyebrow-num">03 /</span> Strengths' data-ko='<span class="eyebrow-num">03 /</span> 강점'><span class="eyebrow-num">03 /</span> Strengths</div>
+      <h2 class="display" data-en="A LINK<br />YOU CAN TRUST." data-ko="신뢰할 수 있는<br />연결고리.">A LINK<br />YOU CAN TRUST.</h2>
     </div>
     <div class="strengths">
       <div class="str-grid">
-        <div class="str"><div class="str-head"><span class="n">01</span><span>A · CHAIN</span></div><h4>One-stop chain</h4><div class="kr">원스톱 체인</div><p>From manufacture through delivery: a single accountable partner spans the chain.</p></div>
-        <div class="str"><div class="str-head"><span class="n">02</span><span>B · SOURCE</span></div><h4>Global sourcing</h4><div class="kr">글로벌 소싱</div><p>A trade network reaching the right supplier across global markets.</p></div>
-        <div class="str"><div class="str-head"><span class="n">03</span><span>C · QUALITY</span></div><h4>Quality first</h4><div class="kr">품질 우선</div><p>Tolerances and specifications held consistently across every production run.</p></div>
-        <div class="str"><div class="str-head"><span class="n">04</span><span>D · SPEED</span></div><h4>Speed &amp; response</h4><div class="kr">속도와 대응</div><p>The responsiveness global partners expect, delivered without friction.</p></div>
+        <div class="str"><div class="str-head"><span class="n">01</span><span>A · CHAIN</span></div><h4 data-en="One-stop chain" data-ko="원스톱 체인">One-stop chain</h4><p data-en="From manufacture through delivery: a single accountable partner spans the chain." data-ko="제조부터 납품까지, 하나의 책임 파트너가 전 과정을 담당합니다.">From manufacture through delivery: a single accountable partner spans the chain.</p></div>
+        <div class="str"><div class="str-head"><span class="n">02</span><span>B · SOURCE</span></div><h4 data-en="Global sourcing" data-ko="글로벌 소싱">Global sourcing</h4><p data-en="A trade network reaching the right supplier across global markets." data-ko="세계 시장에서 최적의 공급처에 닿는 무역 네트워크.">A trade network reaching the right supplier across global markets.</p></div>
+        <div class="str"><div class="str-head"><span class="n">03</span><span>C · QUALITY</span></div><h4 data-en="Quality first" data-ko="품질 우선">Quality first</h4><p data-en="Tolerances and specifications held consistently across every production run." data-ko="모든 생산에서 허용오차와 사양을 일관되게 유지합니다.">Tolerances and specifications held consistently across every production run.</p></div>
+        <div class="str"><div class="str-head"><span class="n">04</span><span>D · SPEED</span></div><h4 data-en="Speed &amp; response" data-ko="속도와 대응">Speed &amp; response</h4><p data-en="The responsiveness global partners expect, delivered without friction." data-ko="글로벌 파트너가 기대하는 대응 속도를 마찰 없이 제공합니다.">The responsiveness global partners expect, delivered without friction.</p></div>
       </div>
     </div>
   </section>
@@ -451,23 +401,20 @@
   <!-- ===== NETWORK ===== -->
   <section id="network">
     <div class="sec-head">
-      <div>
-        <div class="eyebrow"><span class="eyebrow-num">04 /</span> Network<span class="kr"> · 글로벌 네트워크</span></div>
-        <h2 class="display">SEOUL → WORLD.</h2>
-      </div>
-      <div class="right kr">전자부품,<br />국경을 넘어.</div>
+      <div class="eyebrow" data-en='<span class="eyebrow-num">04 /</span> Network' data-ko='<span class="eyebrow-num">04 /</span> 글로벌 네트워크'><span class="eyebrow-num">04 /</span> Network</div>
+      <h2 class="display" data-en="SEOUL → WORLD." data-ko="서울에서 세계로.">SEOUL → WORLD.</h2>
     </div>
     <div class="net">
       <div class="net-frame">
-        <div class="net-coord" style="top:12px;left:16px;">FIG · 04.01 · GLOBAL NETWORK · 2026</div>
-        <div class="net-coord" style="top:12px;right:16px;">SCALE · 1 : SCHEMATIC</div>
-        <div class="net-coord" style="bottom:12px;left:16px;">HUB · SEOUL · 37.5°N · 126.9°E</div>
-        <div class="net-coord" style="bottom:12px;right:16px;">04 REGIONS · ACTIVE</div>
+        <div class="net-coord" style="top:12px;left:16px;" data-en="FIG · 04.01 · GLOBAL NETWORK · 2026" data-ko="도면 · 04.01 · 글로벌 네트워크 · 2026">FIG · 04.01 · GLOBAL NETWORK · 2026</div>
+        <div class="net-coord" style="top:12px;right:16px;" data-en="SCALE · 1 : SCHEMATIC" data-ko="축척 · 1 : 개략도">SCALE · 1 : SCHEMATIC</div>
+        <div class="net-coord" style="bottom:12px;left:16px;" data-en="HUB · SEOUL · 37.5°N · 126.9°E" data-ko="허브 · 서울 · 37.5°N · 126.9°E">HUB · SEOUL · 37.5°N · 126.9°E</div>
+        <div class="net-coord" style="bottom:12px;right:16px;" data-en="04 REGIONS · ACTIVE" data-ko="04개 권역 · 활성">04 REGIONS · ACTIVE</div>
         <div class="net-side">
-          <div class="row"><span class="dot"></span><b>EAST ASIA</b><span>HQ<span class="kr"> · 본사</span></span></div>
-          <div class="row"><span class="dot"></span><b>SE ASIA</b><span>SOURCING<span class="kr"> · 소싱</span></span></div>
-          <div class="row"><span class="dot"></span><b>NORTH AMER.</b><span>TRADE<span class="kr"> · 무역</span></span></div>
-          <div class="row"><span class="dot"></span><b>EUROPE</b><span>TRADE<span class="kr"> · 무역</span></span></div>
+          <div class="row"><span class="dot"></span><b data-en="EAST ASIA" data-ko="동아시아">EAST ASIA</b><span data-en="HQ" data-ko="본사">HQ</span></div>
+          <div class="row"><span class="dot"></span><b data-en="SE ASIA" data-ko="동남아시아">SE ASIA</b><span data-en="SOURCING" data-ko="소싱">SOURCING</span></div>
+          <div class="row"><span class="dot"></span><b data-en="NORTH AMER." data-ko="북미">NORTH AMER.</b><span data-en="TRADE" data-ko="무역">TRADE</span></div>
+          <div class="row"><span class="dot"></span><b data-en="EUROPE" data-ko="유럽">EUROPE</b><span data-en="TRADE" data-ko="무역">TRADE</span></div>
         </div>
         <svg id="arcsMap" viewBox="0 0 1200 540" preserveAspectRatio="xMidYMid meet" aria-hidden="true"></svg>
       </div>
@@ -478,52 +425,49 @@
   <section class="cta-strip">
     <svg id="ctaGrid" viewBox="0 0 1440 480" preserveAspectRatio="none" aria-hidden="true" style="position:absolute;inset:0;width:100%;height:100%;opacity:0.12;pointer-events:none;"></svg>
     <div class="inner">
-      <h2 class="display">POWER<br />THAT CONNECTS<br />THE NEXT CIRCUIT<span class="signal">.</span></h2>
-      <p>Looking for a components partner you can trust? Let's talk through what you're sourcing — quantities, specifications, and timeline.</p>
-      <a href="#contact" class="btn btn-primary">Start an inquiry <span class="arrow">→</span></a>
+      <h2 class="display" data-en='POWER<br />THAT CONNECTS<br />THE NEXT CIRCUIT<span class="signal">.</span>' data-ko='다음 회로를<br />잇는 힘<span class="signal">.</span>'>POWER<br />THAT CONNECTS<br />THE NEXT CIRCUIT<span class="signal">.</span></h2>
+      <p data-en="Looking for a components partner you can trust? Let's talk through what you're sourcing — quantities, specifications, and timeline." data-ko="믿을 수 있는 부품 파트너를 찾고 계신가요? 필요한 수량·사양·일정을 함께 논의하겠습니다.">Looking for a components partner you can trust? Let's talk through what you're sourcing — quantities, specifications, and timeline.</p>
+      <a href="#contact" class="btn btn-primary"><span data-en="Start an inquiry" data-ko="문의 시작하기">Start an inquiry</span> <span class="arrow">→</span></a>
     </div>
   </section>
 
   <!-- ===== CONTACT ===== -->
   <section id="contact">
     <div class="sec-head">
-      <div>
-        <div class="eyebrow"><span class="eyebrow-num">05 /</span> Contact<span class="kr"> · 문의</span></div>
-        <h2 class="display">TELL US WHAT<br />YOU'RE SOURCING.</h2>
-      </div>
-      <div class="right kr">필요한 부품을<br />함께 정의합니다.</div>
+      <div class="eyebrow" data-en='<span class="eyebrow-num">05 /</span> Contact' data-ko='<span class="eyebrow-num">05 /</span> 문의'><span class="eyebrow-num">05 /</span> Contact</div>
+      <h2 class="display" data-en="TELL US WHAT<br />YOU'RE SOURCING." data-ko="필요한 부품을<br />알려주세요.">TELL US WHAT<br />YOU'RE SOURCING.</h2>
     </div>
     <div class="contact">
       <div class="contact-grid">
         <div class="contact-info">
           <dl>
-            <div><dt>Entity<span class="kr"> · 법인명</span></dt><dd>NOVIX Co., Ltd.<small class="kr">주식회사 노빅스</small></dd></div>
-            <div><dt>Headquarters<span class="kr"> · 본사</span></dt><dd>Teheran-ro, Gangnam-gu<small class="kr">서울특별시 강남구 테헤란로</small></dd></div>
-            <div><dt>General<span class="kr"> · 일반 문의</span></dt><dd><a href="mailto:info@novixint.com">info@novixint.com</a></dd></div>
-            <div><dt>Sales<span class="kr"> · 영업 문의</span></dt><dd><a href="mailto:sales@novixint.com">sales@novixint.com</a></dd></div>
-            <div><dt>Business<span class="kr"> · 사업 분야</span></dt><dd>Manufacturing · Wholesale · Trade<small class="kr">제조업 · 도매업 · 무역</small></dd></div>
+            <div><dt data-en="Entity" data-ko="법인명">Entity</dt><dd data-en="NOVIX Co., Ltd." data-ko="주식회사 노빅스">NOVIX Co., Ltd.</dd></div>
+            <div><dt data-en="Headquarters" data-ko="본사">Headquarters</dt><dd data-en="Teheran-ro, Gangnam-gu, Seoul" data-ko="서울특별시 강남구 테헤란로">Teheran-ro, Gangnam-gu, Seoul</dd></div>
+            <div><dt data-en="General" data-ko="일반 문의">General</dt><dd><a href="mailto:info@novixint.com">info@novixint.com</a></dd></div>
+            <div><dt data-en="Sales" data-ko="영업 문의">Sales</dt><dd><a href="mailto:sales@novixint.com">sales@novixint.com</a></dd></div>
+            <div><dt data-en="Business" data-ko="사업 분야">Business</dt><dd data-en="Manufacturing · Wholesale · Trade" data-ko="제조업 · 도매업 · 무역">Manufacturing · Wholesale · Trade</dd></div>
           </dl>
         </div>
         <form class="form" id="cform">
           <div class="form-field">
-            <label for="f-name">Name<span class="kr"> · 이름</span></label>
-            <input id="f-name" name="name" type="text" autocomplete="name" placeholder="Your name" required />
+            <label for="f-name" data-en="Name" data-ko="이름">Name</label>
+            <input id="f-name" name="name" type="text" autocomplete="name" data-ph-en="Your name" data-ph-ko="이름" placeholder="Your name" required />
           </div>
           <div class="form-field">
-            <label for="f-company">Company<span class="kr"> · 회사</span></label>
-            <input id="f-company" name="company" type="text" autocomplete="organization" placeholder="Company name" />
+            <label for="f-company" data-en="Company" data-ko="회사">Company</label>
+            <input id="f-company" name="company" type="text" autocomplete="organization" data-ph-en="Company name" data-ph-ko="회사명" placeholder="Company name" />
           </div>
           <div class="form-field full">
-            <label for="f-email">Email<span class="kr"> · 이메일</span></label>
-            <input id="f-email" name="email" type="email" autocomplete="email" placeholder="you@company.com" required />
+            <label for="f-email" data-en="Email" data-ko="이메일">Email</label>
+            <input id="f-email" name="email" type="email" autocomplete="email" data-ph-en="you@company.com" data-ph-ko="you@company.com" placeholder="you@company.com" required />
           </div>
           <div class="form-field full">
-            <label for="f-msg">Inquiry<span class="kr"> · 문의 내용</span></label>
-            <textarea id="f-msg" name="message" placeholder="Tell us what you're sourcing — quantities, specs, timeline." required></textarea>
+            <label for="f-msg" data-en="Inquiry" data-ko="문의 내용">Inquiry</label>
+            <textarea id="f-msg" name="message" data-ph-en="Tell us what you're sourcing — quantities, specs, timeline." data-ph-ko="필요한 부품을 알려주세요 — 수량, 사양, 일정." placeholder="Tell us what you're sourcing — quantities, specs, timeline." required></textarea>
           </div>
           <div class="form-field full submit-row">
-            <span class="note">Replies within one business day<span class="kr"> · 영업일 1일 이내 회신</span></span>
-            <button type="submit" class="btn btn-primary">Send inquiry <span class="arrow">→</span></button>
+            <span class="note" data-en="Replies within one business day" data-ko="영업일 1일 이내 회신">Replies within one business day</span>
+            <button type="submit" class="btn btn-primary"><span data-en="Send inquiry" data-ko="문의 보내기">Send inquiry</span> <span class="arrow">→</span></button>
           </div>
         </form>
       </div>
@@ -536,30 +480,30 @@
     <div class="row1">
       <div>
         <div class="wordmark"><img src="assets/novix-wordmark.png" alt="NOVIX" /></div>
-        <p>Manufacture, distribution and global trade of electronic components — beyond borders.</p>
+        <p data-en="Manufacture, distribution and global trade of electronic components — beyond borders." data-ko="전자부품의 제조·유통 및 글로벌 무역 — 국경을 넘어.">Manufacture, distribution and global trade of electronic components — beyond borders.</p>
       </div>
       <div>
-        <h5>Site</h5>
+        <h5 data-en="Site" data-ko="바로가기">Site</h5>
         <ul>
-          <li><a href="#about">About</a></li>
-          <li><a href="#capabilities">Capabilities</a></li>
-          <li><a href="#network">Network</a></li>
-          <li><a href="#contact">Contact</a></li>
+          <li><a href="#about" data-en="About" data-ko="회사소개">About</a></li>
+          <li><a href="#capabilities" data-en="Capabilities" data-ko="사업영역">Capabilities</a></li>
+          <li><a href="#network" data-en="Network" data-ko="네트워크">Network</a></li>
+          <li><a href="#contact" data-en="Contact" data-ko="문의">Contact</a></li>
         </ul>
       </div>
       <div>
-        <h5>Contact</h5>
+        <h5 data-en="Contact" data-ko="연락처">Contact</h5>
         <ul>
           <li><a href="mailto:info@novixint.com">info@novixint.com</a></li>
           <li><a href="mailto:sales@novixint.com">sales@novixint.com</a></li>
-          <li>Teheran-ro, Gangnam-gu, Seoul</li>
+          <li data-en="Teheran-ro, Gangnam-gu, Seoul" data-ko="서울 강남구 테헤란로">Teheran-ro, Gangnam-gu, Seoul</li>
           <li>novixint.com</li>
         </ul>
       </div>
     </div>
     <div class="row2">
-      <span>© 2026 NOVIX CO., LTD.<span class="kr"> · 주식회사 노빅스</span></span>
-      <span class="kr">다음 회로를 잇는 힘</span>
+      <span data-en="© 2026 NOVIX CO., LTD." data-ko="© 2026 주식회사 노빅스">© 2026 NOVIX CO., LTD.</span>
+      <span data-en="Powering the next circuit." data-ko="다음 회로를 잇는 힘.">Powering the next circuit.</span>
     </div>
   </footer>
 
@@ -567,15 +511,11 @@
 
 <script>
 (function(){
-  var NS="http://www.w3.org/2000/svg";
-
   /* ----- Hero schematic grid (verbatim from atoms.jsx HeroGrid) ----- */
   function buildHeroGrid(){
     var el=document.getElementById('heroGrid'); if(!el) return;
     var cols=16, rows=10, cw=1440/cols, ch=420/rows, p=[];
-    for(var r=0;r<rows;r++)for(var c=0;c<cols;c++){
-      p.push('<circle cx="'+(c*cw+cw/2)+'" cy="'+(r*ch+ch/2)+'" r="1" fill="var(--muted-3)" opacity="0.4"/>');
-    }
+    for(var r=0;r<rows;r++)for(var c=0;c<cols;c++){p.push('<circle cx="'+(c*cw+cw/2)+'" cy="'+(r*ch+ch/2)+'" r="1" fill="var(--muted-3)" opacity="0.4"/>');}
     var traces=[
       {d:"M 0 60 L 360 60 L 380 80 L 700 80 L 720 100 L 1440 100",delay:0},
       {d:"M 0 200 L 220 200 L 240 220 L 540 220 L 560 240 L 880 240 L 900 220 L 1440 220",delay:1.4},
@@ -585,50 +525,44 @@
       p.push('<path d="'+t.d+'" stroke="var(--hair)" stroke-width="1" fill="none"/>');
       p.push('<path d="'+t.d+'" stroke="var(--signal)" stroke-width="1" fill="none" class="trace-flow" style="animation-delay:'+t.delay+'s;opacity:.55"/>');
     });
-    var nodes=[[360,60],[700,80],[220,200],[540,220],[880,240],[480,340],[820,320]];
-    nodes.forEach(function(n,i){
+    [[360,60],[700,80],[220,200],[540,220],[880,240],[480,340],[820,320]].forEach(function(n,i){
       p.push('<circle cx="'+n[0]+'" cy="'+n[1]+'" r="6" fill="none" stroke="var(--ink)" stroke-opacity="0.18"/>');
       p.push('<circle cx="'+n[0]+'" cy="'+n[1]+'" r="3" fill="var(--ink)" class="pulse-node" style="animation-delay:'+(i*0.3)+'s"/>');
     });
     el.innerHTML=p.join('');
   }
 
-  /* ----- Arcs map (verbatim from atoms.jsx ArcsMap) ----- */
+  /* ----- Arcs map (verbatim geometry; labels swap with language) ----- */
   function blob(cx,cy,w,h){
     var N=22,d=[];
-    for(var i=0;i<N;i++){
-      var t=(i/N)*Math.PI*2, j=0.85+Math.sin(i*1.7)*0.12;
-      var x=cx+Math.cos(t)*(w/2)*j, y=cy+Math.sin(t)*(h/2)*j;
-      d.push('<circle cx="'+x.toFixed(1)+'" cy="'+y.toFixed(1)+'" r="1.1" fill="var(--muted-3)"/>');
-    }
+    for(var i=0;i<N;i++){var t=(i/N)*Math.PI*2, j=0.85+Math.sin(i*1.7)*0.12;var x=cx+Math.cos(t)*(w/2)*j, y=cy+Math.sin(t)*(h/2)*j;d.push('<circle cx="'+x.toFixed(1)+'" cy="'+y.toFixed(1)+'" r="1.1" fill="var(--muted-3)"/>');}
     return '<g opacity="0.7">'+d.join('')+'</g>';
   }
-  function buildArcs(){
+  function buildArcs(lang){
     var el=document.getElementById('arcsMap'); if(!el) return;
+    var ko=lang==='ko';
     var SEOUL=[840,250];
     var NODES=[
-      {name:"EAST ASIA",role:"Headquarters",pos:[840,250],hub:true},
-      {name:"SOUTHEAST ASIA",role:"Sourcing",pos:[780,380]},
-      {name:"NORTH AMERICA",role:"Trade",pos:[240,200]},
-      {name:"EUROPE",role:"Trade",pos:[550,180]}
+      {name:ko?'동아시아':'EAST ASIA',     role:ko?'본사':'HEADQUARTERS', pos:[840,250],hub:true},
+      {name:ko?'동남아시아':'SOUTHEAST ASIA',role:ko?'소싱':'SOURCING',   pos:[780,380]},
+      {name:ko?'북미':'NORTH AMERICA',     role:ko?'무역':'TRADE',        pos:[240,200]},
+      {name:ko?'유럽':'EUROPE',            role:ko?'무역':'TRADE',        pos:[550,180]}
     ];
     function arcPath(a,b){var ax=a[0],ay=a[1],bx=b[0],by=b[1];var mx=(ax+bx)/2;var my=(ay+by)/2-Math.abs(bx-ax)*0.35;return "M "+ax+" "+ay+" Q "+mx+" "+my+" "+bx+" "+by;}
     var accent="var(--signal)", p=[];
     [80,160,240,320,400,480].forEach(function(y){p.push('<line x1="20" x2="1180" y1="'+y+'" y2="'+y+'" stroke="var(--hair-2)" stroke-width="0.6"/>');});
     [120,280,440,600,760,920,1080].forEach(function(x){p.push('<line x1="'+x+'" x2="'+x+'" y1="40" y2="500" stroke="var(--hair-2)" stroke-width="0.6"/>');});
     [[240,200,260,140],[550,180,180,120],[840,250,300,160],[780,380,180,90],[620,400,140,70],[1000,380,140,100]].forEach(function(b){p.push(blob(b[0],b[1],b[2],b[3]));});
-    NODES.filter(function(n){return !n.hub;}).forEach(function(n,i){
-      p.push('<path d="'+arcPath(SEOUL,n.pos)+'" stroke="'+accent+'" stroke-width="1.2" fill="none" class="arc-path" style="animation-delay:'+(i*0.7)+'s"/>');
-    });
+    NODES.filter(function(n){return !n.hub;}).forEach(function(n,i){p.push('<path d="'+arcPath(SEOUL,n.pos)+'" stroke="'+accent+'" stroke-width="1.2" fill="none" class="arc-path" style="animation-delay:'+(i*0.7)+'s"/>');});
     NODES.forEach(function(n,i){
       var t='<g transform="translate('+n.pos[0]+' '+n.pos[1]+')">';
       if(n.hub){t+='<circle r="14" fill="none" stroke="'+accent+'" stroke-width="1" class="arc-node-ring"/><circle r="6" fill="'+accent+'"/><circle r="2" fill="var(--paper)"/>';}
       else{t+='<circle r="9" fill="none" stroke="'+accent+'" stroke-width="1" class="arc-node-ring" style="animation-delay:'+(i*0.4)+'s"/><circle r="3.5" fill="'+accent+'"/>';}
       t+='<text y="'+(n.hub?-22:-16)+'" font-family="var(--mono)" font-size="10" letter-spacing="2" text-anchor="middle" fill="var(--ink)" font-weight="600">'+n.name+'</text>';
-      t+='<text y="'+(n.hub?-8:-2)+'" font-family="var(--mono)" font-size="9" letter-spacing="1.2" text-anchor="middle" fill="var(--muted)">'+n.role.toUpperCase()+'</text></g>';
+      t+='<text y="'+(n.hub?-8:-2)+'" font-family="var(--mono)" font-size="9" letter-spacing="1.2" text-anchor="middle" fill="var(--muted)">'+(ko?n.role:n.role.toUpperCase())+'</text></g>';
       p.push(t);
     });
-    p.push('<text x="840" y="500" font-family="var(--mono)" font-size="11" letter-spacing="3" text-anchor="middle" fill="var(--muted)">37.5° N · 126.9° E · SEOUL · KR</text>');
+    p.push('<text x="840" y="500" font-family="var(--mono)" font-size="11" letter-spacing="3" text-anchor="middle" fill="var(--muted)">'+(ko?'37.5° N · 126.9° E · 서울 · KR':'37.5° N · 126.9° E · SEOUL · KR')+'</text>');
     el.innerHTML=p.join('');
   }
 
@@ -640,22 +574,23 @@
     el.innerHTML=p.join('');
   }
 
-  buildHeroGrid(); buildArcs(); buildCtaGrid();
+  buildHeroGrid(); buildCtaGrid();
 
-  /* ----- Language toggle (show/hide Korean annotations) ----- */
+  /* ----- Language: full content swap (hero headline stays English) ----- */
   var html=document.documentElement;
-  function setLang(lang){
-    if(lang==='en') html.classList.add('hide-korean'); else html.classList.remove('hide-korean');
-    document.querySelectorAll('.nav-lang button').forEach(function(b){
-      b.classList.toggle('active', b.getAttribute('data-lang')===lang);
-    });
+  function applyLang(lang){
+    document.querySelectorAll('[data-en]').forEach(function(el){ el.innerHTML = el.getAttribute('data-'+lang); });
+    document.querySelectorAll('[data-ph-en]').forEach(function(el){ el.placeholder = el.getAttribute('data-ph-'+lang); });
+    html.lang = lang;
+    document.querySelectorAll('.nav-lang button').forEach(function(b){ b.classList.toggle('active', b.getAttribute('data-lang')===lang); });
+    buildArcs(lang);
     try{localStorage.setItem('novix-lang',lang);}catch(e){}
   }
   document.querySelectorAll('.nav-lang button').forEach(function(b){
-    b.addEventListener('click',function(){setLang(b.getAttribute('data-lang'));});
+    b.addEventListener('click',function(){applyLang(b.getAttribute('data-lang'));});
   });
-  var saved='ko'; try{saved=localStorage.getItem('novix-lang')||'ko';}catch(e){}
-  setLang(saved);
+  var saved='en'; try{saved=localStorage.getItem('novix-lang')||'en';}catch(e){}
+  applyLang(saved);
 
   /* ----- Mobile nav ----- */
   var burger=document.getElementById('burger'), links=document.getElementById('navLinks');
@@ -666,7 +601,7 @@
   var form=document.getElementById('cform');
   form.addEventListener('submit',function(e){
     e.preventDefault();
-    var f=form.elements, ko=!html.classList.contains('hide-korean');
+    var f=form.elements, ko=html.lang==='ko';
     var subj=(ko?'[NOVIX 문의] ':'[NOVIX Inquiry] ')+(f.company.value||f.name.value);
     var body=(ko
       ?('이름: '+f.name.value+'\n회사: '+f.company.value+'\n이메일: '+f.email.value+'\n\n'+f.message.value)
